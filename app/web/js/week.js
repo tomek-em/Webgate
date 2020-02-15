@@ -286,7 +286,7 @@ const setEventListeners = function(week) {
     // delete event buton listener
     const delete_btn = document.getElementById('delete_btn');
         delete_btn.addEventListener('click', () => {
-            console.log(id);
+            console.log('del');
             //deleteEvent(id);
         });
 
