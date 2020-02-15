@@ -1,0 +1,141 @@
+.week_cal {
+    position: relative;
+}
+
+.week_cal_nav {
+    position: absolute;
+    left: 0;
+}
+
+.week_cal_nav a{
+    text-decoration: none;
+    color: #444;
+    font-size: 1.5em;
+    padding: 2px 6px;
+}
+
+.week_body {
+    display: flex;
+    margin-bottom: 1em;
+}
+
+@media only screen and (max-width: 768px) {
+    .week_body {
+        flex-direction: column;
+    }
+}
+
+
+
+
+
+.week_day {
+    width: 14%;
+    border: 1px solid #DED9D9;
+    margin-left: 1px;
+    margin-right: 1px;
+}
+
+.week_day .day_body {
+    min-height: 300px;
+}
+
+@media only screen and (max-width: 768px) {
+    .week_day {
+        width: 96%;
+    }
+    
+    .week_day .day_body {
+        min-height: 200px;
+    }
+}
+
+.day_header {
+    background: #DED9D9;
+    text-align: center;
+    min-height: 3em;
+    padding: 2px 2px;
+}
+
+.day_header span{
+    display: inline-block;
+    width: 95%;
+}
+
+.today {
+    background: #aa6;
+}
+
+.day_body {
+    padding: 5px;
+}
+
+.event {
+    min-height: 100px;
+    padding: 4px;
+    margin: 10px 0;
+    border-radius: 5%;
+    background: #DED9D9;
+}
+
+
+
+
+/* Event forms -- -- */
+#event_form_cont {
+    position: fixed;
+    top: 100px;
+    width: 50%;
+    max-width: 400px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+}
+
+@media only screen and (max-width: 768px) {
+    .event_form_cont {
+        width: 96%;
+    }
+}
+
+
+#event_window {
+    display: none;
+}
+
+.side_window {
+    width: 30%;
+    min-width: 250px;
+    position: fixed;
+    right: 0;
+    top: 10px;
+    height: 92vh;
+    text-align: center;
+    background: #eee;
+    border: 1p solid #DED9D9;
+}
+
+
+/* Alerts -- */
+#alert {
+    display: none;
+    position: fixed;
+    top: 4px;
+    width: 90%;
+    max-width: 500px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 20px 10px;
+    text-align: center;
+    background: #eee;
+    border: 1px solid #DED9D9;
+    font-size: 1.2em;
+}
+
+.red {
+    color: #f00;
+}
+
+.green {
+    color: #060;
+}

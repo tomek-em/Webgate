@@ -1,0 +1,11 @@
+RewriteEngine On
+RewriteBase /
+
+# RewriteRule ^$ webgate/app/index.php [L]
+# RewriteRule ^about$ webgate/app/index.php/?page=about [L]
+
+RewriteRule ^$ webgate/app/index.php/?url=index [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ webgate/app/index.php/?url=$1 [L]
+RewriteRule ^app/web/$ webgate/app/index.php/?url=$1 [L]

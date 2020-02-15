@@ -1,0 +1,66 @@
+html, body {
+  height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.content {
+    flex: 1;
+}
+
+footer {
+    width: 100%;
+    min-height: 100px;
+    line-height: 100px;
+    text-align: center;
+}
+
+footer p {
+    margin-bottom: 0;
+}
+
+
+
+.vertical_center {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.float_right {
+    float: right;
+}
+
+/* Extend bootstrap styles */
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.5)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar a{
+    color: #eee;
+}
+
+.navbar a:hover {
+    color: #ccc;
+}
+
+.no_link a:hover {
+    text-decoration: none;
+    color: #eee;
+}
+
+@media only screen and (max-width: 768px) {
+    .no_link {
+        display: none;
+    }
+}
+
+.navbar-nav {
+    text-align: center;
+}
