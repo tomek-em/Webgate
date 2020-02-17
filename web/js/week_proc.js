@@ -288,6 +288,10 @@ const setEventListeners = function(week) {
         delete_btn.addEventListener('click', () => {
             console.log('del');
             //deleteEvent(id);
+            // cant get id here. 
+            // use HTML data atribut data-id or OOP  
+            //In worst case ad id to window as hiden <p>
+        
         });
 
 

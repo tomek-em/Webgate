@@ -11,8 +11,8 @@
     <!-- Bootstrap core CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
     
-    <link rel="stylesheet" href="<?php echo URL_ROOT ?>app/web/css/week.css">
-    <link rel="stylesheet" href="<?php echo URL_ROOT ?>app/web/css/main.css">
+    <link rel="stylesheet" href="<?php echo URL_ROOT ?>web/css/week.css">
+    <link rel="stylesheet" href="<?php echo URL_ROOT ?>web/css/main.css">
     
 </head>
 
@@ -174,7 +174,7 @@
     
 
     
-    <script src="<?php echo URL_ROOT ?>app/web/js/week.js"></script>
+    <script src="<?php echo URL_ROOT ?>web/js/week_proc.js"></script>
 </body>
 </html>
 

@@ -56,7 +56,7 @@
                             <input type="submit" value="Register" class="btn btn-success btn-block">
                         </div>
                         <div class="col">
-                            <a href="<?php echo URL_ROOT; ?>/user/login" class="btn btn-secondary btn-block">Cancel</a>
+                            <a href="<?php echo URL_ROOT; ?>user/login" class="btn btn-secondary btn-block">Cancel</a>
                         </div>
                     </div>
                 </form>
