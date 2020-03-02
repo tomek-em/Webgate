@@ -64,3 +64,22 @@ footer p {
 .navbar-nav {
     text-align: center;
 }
+
+
+
+
+/* --  */
+.bg_blue {
+    background: #07507f;
+/*    bg-dark before*/
+}
+
+.btn_blue {
+    background-color: #4C86B3;
+    color: #fff;
+}
+
+.btn_blue:hover {
+    background-color: #4280A4;
+    color: #fff;
+}

@@ -1,0 +1,111 @@
+
+
+.slot_users {
+    margin-right: 20px;
+}
+
+/* DROPDOWN */
+#select_usr {
+    background: #fff;
+    margin-right: 20px;
+    position: relative;
+}
+
+#select_usr .btn {
+    padding: 2px 2px;
+    height: 40px;
+    width: 140px;
+    overflow: hidden;
+    line-height: 36px;
+}
+
+.usr_list {
+    /* overwrite bootstrap styles */
+    margin-bottom: 0;
+    padding: 0; 
+    
+    position: absolute;
+    margin-top: 1px;
+    width: 180px;
+    right: 0;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    
+    background: #888;
+    color: #fff;
+    list-style: none;
+    border-radius: 0.25em;
+    
+    /* Animate */
+    opacity: 0;
+/*    pointer-events: none;*/
+    transform: translateY(-10px);
+    transition: all 0.4s ease;
+}
+
+#select_usr .btn:focus + ul{
+    opacity: 1;
+    transform: translateY(0px);
+}
+
+
+
+.usr_list li {
+    padding: 6px 2px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.usr_list li:hover {
+    background: #FC6F37;
+}
+
+
+/* SLOTS */
+.slot {
+    min-height: 20px;
+    padding: 2px 5px;
+    margin: 2px 0;
+    background: #FEE9F9;
+}
+
+#slot_form_cont {
+    display: none;
+}
+
+.time_group {
+    max-width: 220px;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
+
+
+/* alerts */
+#confirm_del_alert {
+    display: none;
+    background: #DCC;
+    border: 1px solid #BBB;
+    position: fixed;
+    z-index: 100;
+    width: 600px;
+    max-width: 98%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    padding: 1em;
+}
+
+@media only screen and (max-width: 768px) {
+    #confirm_del_alert { 
+        width: 100%;
+    }
+}
+

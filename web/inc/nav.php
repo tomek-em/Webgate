@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md bg-dark">
+<nav class="navbar navbar-expand-md bg_blue">
         <div class="container-fluid">
             <a class="navbar-brand" href="<?php echo URL_ROOT ?>"><?php echo APP_NAME; ?></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -12,6 +12,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="load-link" href="<?php echo URL_ROOT ?>calendar/week">Week</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="load-link" href="<?php echo URL_ROOT ?>calendar/slots">Book</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="load-link" href="#">Load</a>

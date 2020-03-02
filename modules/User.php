@@ -1,32 +1,18 @@
 <?php
 
 class User extends Core {
-    
-    private $db;
-    
-    public function __construct() {
-        $this->db = new Database;
+    public function __construct(){
+        $this->userModel = new UserModel;
     }
-    
-    public function test() {
-        //
-        $arr = [];
-        $this->render('user/test', $arr);
-    }
-    
     
     // REGISTER
-    
     public function register() {
-        
         if(isset($_SESSION['user_id'])) {
             header('location: '.URL_ROOT);
         }
         // check for posts
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
             $valid = 'true';
-            //die('submited');
-            // process form - sanitize POST data
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
             
             $data = [
@@ -47,7 +33,7 @@ class User extends Core {
                 $valid = false;
             } else {
                 // check email
-                if($this->findUserByName($data['name'])) {
+                if($this->userModel->findUserByName($data['name'])) {
                     $data['name_err'] = 'This name is already taken.';
                     $valid = false;
                 }
@@ -99,7 +85,7 @@ class User extends Core {
                 $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
                 
                 // Register user
-                if($this->registerUser($data)) {
+                if($this->userModel->registerUser($data)) {
                     flash('register_success', 'You are registered. Please log in');
                     header("Location: " .URL_ROOT. 'user/login');
                 } else {
@@ -153,7 +139,6 @@ class User extends Core {
                 'password_error' => ''              
             ];
             
-            
              // validate email
             if(empty($data['name'])) {
                 $data['name_err'] = 'Please enter the email';
@@ -164,7 +149,7 @@ class User extends Core {
             } 
             //die($data['name']);
             // check for user / email
-            if($this->findUserByName($data['name'])) {
+            if($this->userModel ->findUserByName($data['name'])) {
                 // user found
                     
                 } else {
@@ -176,7 +161,7 @@ class User extends Core {
             if(empty($data['name_err'])  && empty($data['password_err']) ) {
                 
                 // check pass
-                $loggedInUser = $this->logInUser($data['name'], $data['password']);
+                $loggedInUser = $this->userModel->logInUser($data['name'], $data['password']);
                 
                 if($loggedInUser) {
                     //create session
@@ -206,55 +191,6 @@ class User extends Core {
             $this->render('user/login', $data);
         }
     } // End of login 
-    
-    
-    
-    
-    // register user function ---------------
-        public function registerUser($data) {
-            $this->db->query('INSERT INTO users (name, email, password) VALUES(:name, :email, :password)');
-            $this->db->bind(':name', $data['name']);
-            $this->db->bind(':email', $data['email']);
-            $this->db->bind(':password', $data['password']);
-            
-            // execute
-            if($this->db->execute()) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        
-        // find user by name
-        public function findUserByName($name) {
-            //die('no user');
-            $this->db->query("SELECT * FROM users WHERE name = :name");
-            $this->db->bind(':name', $name);
-            
-            $row = $this->db->single();
-            
-            // check row
-            if($this->db->rowCount() > 0) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        
-        // login user
-        public function logInUser($name, $password) {
-            $this->db->query("SELECT * FROM users WHERE name = :name");
-            $this->db->bind(':name', $name);
-            
-            $row = $this->db->single();
-            
-            $hashed_password = $row->password;
-            if(password_verify($password, $hashed_password)) {;
-                return $row;
-            } else {
-                return false;
-            }
-        }
     
     
     

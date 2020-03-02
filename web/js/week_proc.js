@@ -1,126 +1,83 @@
-const showAlert = function(text, color) {
-    const alert = document.getElementById('alert');
-    alert.classList.add('d-block');
-    alert.classList.add(color);
-    alert.innerHTML = text;
-    const hideAlert = function() {
-        alert.classList.remove('d-block');
-        alert.classList.remove(color);
-    }
-    var cancel = setInterval(hideAlert, 2000);
+/* 
+* what next?
+* use data atributes data like event body: (data-body) 
+* oop
+* return ok for methods checked
+* alert div created in js
+* for() to forEach ??
+*/
+(function(){
+
+//let events = {};    
+let weekDates = {};
+
+function setNewDates(dates) {
+    weekDates['mon'] = dates[0];
+    weekDates['tue'] = dates[1];
+    weekDates['wed'] = dates[2];
+    weekDates['thu'] = dates[3];
+    weekDates['fri'] = dates[4];
+    weekDates['sat'] = dates[5];
+    weekDates['sun'] = dates[6];
 }
-
-
-const getDayName = function(dayOfWeek) {
-    const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-    const day = days[dayOfWeek];
-    return day;
-}
-
-const getShortDate = function(d) {
-    date = new Date(d);
-    let dd = String(date.getDate()).padStart(2, '0');
-    let mm = String(date.getMonth() + 1).padStart(2, '0'); //Jan is 0!
-    let yyyy = date.getFullYear();
-    let day = date.getDay();
-    if (day == 0) day = 7;
     
-    let current_date = [`${dd}-${mm}-${yyyy}`, day];
-    return current_date;
-}
 
-    // get first day of current week
-const getMonday = function(w = 0) {
-    let date = new Date();
+function showFormAlert(type, text) {
+    let form_cont = document.getElementById('event_form_cont');
+    let alert = document.createElement('div');
+    alert.id = "alert";
+    alert.className = `alert alert-${type}`;
+    alert.appendChild(document.createTextNode(text));
+    form_cont.insertBefore(alert, form_cont.firstChild);
+    setTimeout(() => document.querySelector('.alert').remove(), 3000);
+}
     
-    if (w == 10) {
-        date = new Date('January 5, 2020 11:13:00');
-    }
-    date.setDate(date.getDate() + w);
+function showAlert(type, text) {
+    let container = document.getElementById('calendar_wrapper');
+    let alert = document.createElement('div');
+    alert.id = "alert";
+    alert.className = `alert alert-${type} fixed_alert`;
+    alert.appendChild(document.createTextNode(text));
+    container.insertBefore(alert, container.firstChild);
+    setTimeout(() => document.querySelector('.alert').remove(), 3000);
+}    
+
+
+
+// EVENTS --------
+// show day event
+
+
+
+// fetch events function
+function getWeekEvents(action, id, dates) {
+    const url = `/webgate/calendar/${action}`;
     
-    let day = date.getDay();
-    if (day == 0) day = 7;
-    date.setDate(date.getDate() - day + 1);
-    
-    return date;
-}
-
-    // get date of each day
-const getCurrentDate = function(mon, day) {
-    let full_date = new Date(mon);
-    full_date.setDate(full_date.getDate() + day);
-    let date = getShortDate(full_date);
-    return date[0];
-}
-
-
-    // set date for each day
-const setWeekDates = function(date) {
-    let headers = [];
-    for (let i=0; i<=6; i++) {
-        let day_name = getDayName(i);
-        let header = document.querySelector('#'+day_name + ' .wc_date');
-        header.innerHTML = date[i];
-        if(date[i] == getShortDate(new Date())[0]) {
-            document.querySelector('#'+day_name + ' .day_header').classList.add('today');
-        }
-    }
-}
-
-    //clean up
-const cleanWeekCal = function() {
-    const days = document.querySelectorAll('.day_body');
-    for (let i = 0; i < days.length; i++){ 
-        days[i].innerHTML = '';
-    }
-    
-    const headers = document.querySelectorAll('.day_header');
-    for (let i = 0; i < headers.length; i++){ 
-        headers[i].classList.remove('today');
-    }
-}
-
-
-
-    // show day event
-const showEvent = function(event) {
-    let day_name = getDayName(event['day'] - 1);
-    let cur_day = document.querySelector('#'+day_name + ' .day_body');
-    let event_div = document.createElement('div');
-    event_div.classList.add('event');
-    event_div.id = event['id'];
-    event_div.innerHTML = event['title'];
-    
-    cur_day.appendChild(event_div);
-
-}
-
-
-
-    // fetch events function
-const getWeekEvents = function(dates) {
-    const url = '/webgate/calendar/fetchweekevents';
-    let events = [];
-
     // create XMR Obj
     let xhr = new XMLHttpRequest();
 
-    // OPEN - type ,url, async
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
+    
+    if(action == 'getsingleevent') {
+        xhr.onload = function() {  
+            if(xhr.status == 200) {
+                let data = JSON.parse(xhr.responseText);
+                setEventData(data);
+            }
+        }
+        xhr.send(`id=${id}`);
+        
+    } else {
     xhr.onload = function() {  
         if(xhr.status == 200) {
-            //let data = xhr.responseText;
-            try {
+            let events = {};
                 let data = JSON.parse(xhr.responseText);
-                for(let i in data) { 
+                for(let i in data) {
                     events[i] = ({
                         id: data[i].id,
-                        php_date: data[i].date,
                         date: getShortDate(data[i].date)[0],
                         day: getShortDate(data[i].date)[1],
-                        user_id: data[i].user_id,
                         title: data[i].title,
                         body: data[i].body,
                         type: data[i].type,
@@ -128,177 +85,325 @@ const getWeekEvents = function(dates) {
                     });
                     showEvent(events[i]);
                 }
-            } catch (e) {
-                console.log('Empty');
+            } else {
+                console.log('Error');
             }
-
-        } else {
-            console.log('Error');
         }
+        xhr.send(`mon=${dates[0]}&sun=${dates[6]}`);
     }
-
-    // Change to array obj or sth!!!! -----
-    xhr.send(
-        'mon=' + dates[0] +
-        '&sun=' + dates[6]
-    );
 }
 
-    // add event
-const addEvent = function(data) {
-    const url = '/webgate/calendar/add';
+  
+
+// show event on page    
+function showEvent(event) {
+    let day_name = getDayName(event['day'] - 1);
+    let cur_day = document.querySelector('#'+day_name + ' .day_body');
+    let event_div = document.createElement('div');
+    event_div.classList.add('event');
+    event_div.id = event['id'];
+    event_div.innerHTML = event['title'];
+
+    cur_day.appendChild(event_div);
+}
+    
+function addEvent(data) {
+    // check if event date is in this week
+    let day = getDayName(data['day'] -1);
+    let day_date = weekDates[day].split("-").reverse().join("-");
+    if (data['date'] == day_date) {
+        let d = new Date(data['date']);
+        data['date'] = getShortDate(d)[0];
+        //events.push(data);
+        showEvent(data);
+    }
+    
+}   
+    
+function deleteEvent(id) {
+    document.getElementById(id).remove();
+}  
+    
+
+function sendData(action, data) {
+    let url = `/webgate/calendar/${action}event`;
     let xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     
-    xhr.onload = function() {
-        if(xhr.status == 200) {
-            document.getElementById('event_form_cont').classList.remove('d-block');
-            let response = xhr.responseText;
-            let color = 'green';
-            if(response != 'Event added') color = 'red';
-            showAlert(response, color);
-            
-            let event = ['day', 'title'];
-            event['day'] = new Date(data['date']).getDay();
-            event['title'] = data['title'];
-            showEvent(event);
-            
+    if(action == 'add'){
+        xhr.onload = function() {
+            if(xhr.status == 200) {
+                let res = xhr.responseText;
+                data['id'] = res;
+                addEvent(data);
+                // alert
+                showAlert('success', 'Event added');
             } else {
-            console.log('error');
+                console.log('error');
+            }       
+        }
+    xhr.send(`title=${data.title}&body=${data.body}&date=${data.date}`);
+    }
+    
+    if(action == 'update'){
+        xhr.onload = function() {
+            if(xhr.status == 200) {
+                let res = xhr.responseText;
+                deleteEvent(data['id']);
+                addEvent(data);
+                showAlert('success', 'Event changed');
+            } else {
+                console.log('error');
+            }       
+        }
+        xhr.send(`title=${data.title}&body=${data.body}&date=${data.date}&id=${data.id}`);
+    }
+    
+    if(action == 'delete'){
+        xhr.onload = function() {
+            if(xhr.status == 200) {
+                let res = xhr.responseText;
+                deleteEvent(data['id']);
+                showAlert('success', 'Event deleted');
+            } else {
+                console.log('error');
+            }       
+        }
+    xhr.send(`id=${data.id}`);
+    }
+}    
+    
+
+// edit event form    
+function setEventData(data){
+    //console.log(data);
+    let d = getShortDate(data.date)[0].split("-").reverse().join("-");
+    document.getElementById('ev_title').innerHTML = data.title;;
+    document.getElementById('ev_body').innerHTML = data.body;
+    document.getElementById('ev_form_date').value = d;
+    document.getElementById('ev_form_title').value = data.title;
+    document.getElementById('ev_form_body').value = data.body;
+    document.getElementById('form_title').innerHTML = 'Edit Event';
+}   
+    
+function getFormData() {
+    let date = document.getElementById('ev_form_date');
+    let title = document.getElementById('ev_form_title');
+    let body = document.getElementById('ev_form_body');
+    let data = [];
+    data['date'] = date.value;
+    data['title'] = title.value;
+    data['body'] = body.value;
+    
+    console.log(data['title']);
+    return data;
+}  
+    
+function clearEventForm(){
+    let title = document.getElementById('ev_form_title').value='';
+    let body = document.getElementById('ev_form_body').value='';
+}    
+
+
+function setEventListeners() {
+    let data = [];
+    let id, date;
+    const form_container = document.getElementById('event_form_cont');
+    const form = document.getElementById('event_form');
+    const form_title = document.getElementById('ev_form_title');
+    const cancel_form = document.getElementById('cancel_form_btn');
+    const event_view = document.getElementById('event_details');
+    const edit_btn = document.getElementById('edit_btn');
+    const delete_btn = document.getElementById('delete_btn');
+    const hide_view_btn = document.getElementById('cancel_view_btn');
+    
+    // Event listener: click on event or day body
+    document.querySelector('.week_cal').addEventListener('click', (e) => {
+        if(e.target.classList.contains('day_body')) {
+            let day_name = e.target.parentElement.id;
+            let d = weekDates[day_name];
+            date = d.split("-").reverse().join("-");
+            document.getElementById('ev_form_date').value = date;
+            
+            document.getElementById('form_title').innerHTML = 'Add Event';
+            form_container.setAttribute('data-action', 'add');
+            event_view.classList.remove('d-block');
+            form_container.classList.add('d-block');
+            clearEventForm();
+            
+            // get position
+            var rect = e.target.getBoundingClientRect();
+            let y_pos = Math.round( e.clientY - rect.top );
+            //console.log(events);
+        } 
+        // click on event
+        else if (e.target.classList.contains('event')) {
+            id = e.target.id;
+            form_container.classList.remove('d-block');
+            event_view.classList.add('d-block');
+            console.log(id);
+            getWeekEvents('getsingleevent', id);
+        }
+    });
+    
+    // event: form submit
+    event_form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let data = getFormData();
+        let day_no = new Date(data['date']).getDay();   
+        if(day_no == 0) day_no = 7;
+        data['day'] = day_no;
+        
+        let atr = form_container.getAttribute('data-action');
+        const t = document.getElementById('ev_form_title').value;
+        if (t == '' ) {
+            // alert
+            let type = 'danger';
+            let info = 'Event title can not be empty';
+            showFormAlert(type, info);
+        } else {
+            form_container.classList.remove('d-block');
+            if (atr == 'add') {
+                sendData('add', data);
+            } 
+            else {
+                data['id'] = id;
+                sendData('update', data);                   
+            } 
+        }
+    });
+    
+    // cancel buttons
+    cancel_form.addEventListener('click', (e) => {
+        form_container.classList.remove('d-block');
+        document.getElementById('ev_form_title').value='';
+        document.getElementById('ev_form_body').value='';
+    });
+    hide_view_btn.addEventListener('click', (e) => {
+        event_view.classList.remove('d-block');
+    });
+    
+    // edit button
+    edit_btn.addEventListener('click', (e) => {
+        event_view.classList.remove('d-block');
+        form_container.classList.add('d-block');
+        form_container.setAttribute('data-action', 'edt');
+        getWeekEvents('getsingleevent', id);
+        }); 
+    
+    // delete button
+    delete_btn.addEventListener('click', (e) => {
+        event_view.classList.remove('d-block');
+        data['id'] = id;
+        sendData('delete', data);
+    });
+}
+
+
+
+// set date ------
+// get day name
+function getDayName(dayOfWeek) {
+    const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+    return days[dayOfWeek];
+}
+
+// get date - returns array: [dd-mm-yyyy, day_number ]
+function getShortDate(d) {
+    date = new Date(d);
+    let dd = String(date.getDate()).padStart(2, '0');
+    let mm = String(date.getMonth() + 1).padStart(2, '0'); //Jan is 0!
+    let yyyy = date.getFullYear();
+    let day = date.getDay();
+    if (day == 0) day = 7;
+
+    let current_date = [`${dd}-${mm}-${yyyy}`, day];
+    return current_date;
+}
+
+// get date of each day
+function getCurrentDate (mon, day) {
+    let full_date = new Date(mon);
+    full_date.setDate(full_date.getDate() + day);
+    let date = getShortDate(full_date);
+    return date[0];
+}
+
+// set date for each day
+function showWeekDates(date) {
+    let header;
+    for (let i=0; i<=6; i++) {
+        let day_name = getDayName(i);
+        header = document.querySelector('#'+day_name + ' .wc_date');
+        header.innerHTML = date[i];
+        // check if current date is today
+        if(date[i] == getShortDate(new Date())[0]) {
+            document.querySelector('#'+day_name + ' .day_header').classList.add('today');
         }
     }
-    xhr.send(
-        'title=' + data['title'] +
-        '&body=' + data['body'] +
-        '&date=' + data['date']
-    );
-}
-
-const deleteEvent = function(id) {
-    console.log('delete ' +id);
-    
 }
 
 
-
-// ---- Create week calendar ---
-const getWeekCalendar = function (weekIndex = 0) {
-    let monday = getMonday(weekIndex);
-    let week = [];
-    for (let i = 0; i <= 6; i++) {
-        week[i] = getCurrentDate(monday, i);
+//clean up
+function clearCalendar() {
+    const days = document.querySelectorAll('.day_body');
+    for (let i = 0; i < days.length; i++){ 
+        days[i].innerHTML = '';
     }
-    setWeekDates(week);
-    // get events
-    getWeekEvents(week);
+
+    const headers = document.querySelectorAll('.day_header');
+    for (let i = 0; i < headers.length; i++){ 
+        headers[i].classList.remove('today');
+    }
     
-    return week;
+    events = [];
 }
 
 
-
-// ---- Event listeners
-const setEventListeners = function(week) {
-    let id = 0;
-    const event_window = document.getElementById('event_window');
+// Create week calendar
+function createWeekCalendar(customDate, weekIndex) {
+    let dates = [];
+    let date = new Date();
+    if (customDate == 10) {
+        date = new Date(customDate);
+    }
+    date.setDate(date.getDate() + weekIndex);
+    let day = date.getDay();
+    if (day == 0) day = 7;
+    let monday =  date.setDate(date.getDate() - day + 1);
     
-    // set previus next button event listeners ----
+    //set date for each day in current week
+    for (let i = 0; i <= 6; i++) {
+        dates[i] = getCurrentDate(monday, i);
+    }
+    setNewDates(dates); // assign dates to object for event listeners
+    showWeekDates(dates);
+    getWeekEvents('getevents', 0, dates);
+}
+
+
+// init function
+function weekCalendarInit(date) {
+    createWeekCalendar(date, 0);
+
+    // event listeners: previous/ next button
+    let weekIndex = 0;
     const prevBtn = document.getElementById('prev');
     const nextBtn = document.getElementById('next');
-    let weekIndex = 0;
+    
     prevBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        cleanWeekCal();
+        clearCalendar();
         weekIndex -= 7;
-        week = getWeekCalendar(weekIndex);
+        createWeekCalendar(date, weekIndex);
     });
     nextBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        cleanWeekCal();
+        clearCalendar();
         weekIndex += 7;
-        week = getWeekCalendar(weekIndex);
+        createWeekCalendar(date, weekIndex);
     });
     
-    
-    // events - event listener ------
-    const days = document.querySelectorAll('.day_body');
-    const form = document.getElementById('event_form_cont');
-    for (let i = 0; i < days.length; i++){
-        days[i].addEventListener('click', (e) => {
-            let date = week[i];
-            // get position
-            var rect = days[i].getBoundingClientRect();
-            let yPos = Math.round( e.clientY - rect.top );
-            
-            if(!e.target.matches('.event')) {
-                form.classList.add('d-block');
-                let form_date = document.getElementById('add_date');
-                event_date = date.split("-").reverse().join("-");
-                form_date.value = event_date;
-                
-                console.log(date + ' ' + event_date);
-                //console.log(date + ' ' + yPos);
-            }
-        });                       
-    }
-    
-    // add event - cancel
-    const cancel_btn = document.getElementById('add_cancel');
-    cancel_btn.addEventListener('click', () => {
-        form.classList.remove('d-block');
-    });
-    
-    
-    // add event - submit
-    document.getElementById('event_form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        let event_form = [];
-        event_form['title'] = document.getElementById('add_title').value;
-        event_form['body'] = document.getElementById('add_body').value;
-        event_form['date'] = document.getElementById('add_date').value;
-        // validation
-        if (event_form['title'] == '') {
-            alert('Event title can not be empty!');
-        } else {
-            addEvent(event_form);
-        }
-    })
-    
-    
-    
-    
-// click on event - event listener
-    document.addEventListener('click',function(e){
-        if(event.target && (event.target.matches('.event'))) {
-            id = event.target.id;
-            console.log(id);
-            event_window.classList.add('d-block');
-        }
-    });
+    setEventListeners();
 }
-
-    const hide_event_window_btn = document.getElementById('hide_event_window');
-        hide_event_window_btn.addEventListener('click', () => {
-            event_window.classList.remove('d-block');
-        });
-
-    // delete event buton listener
-    const delete_btn = document.getElementById('delete_btn');
-        delete_btn.addEventListener('click', () => {
-            console.log('del');
-            //deleteEvent(id);
-            // cant get id here. 
-            // use HTML data atribut data-id or OOP  
-            //In worst case ad id to window as hiden <p>
-        
-        });
-
-
-const weekCalendar = () => {
-    let week = getWeekCalendar();
-    // set event listeners
-    setEventListeners(week);
-    
-}
-document.addEventListener('DOMContentLoaded', weekCalendar, false);
+document.addEventListener('DOMContentLoaded', weekCalendarInit(current_date), false);
+}());

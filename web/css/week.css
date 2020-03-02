@@ -1,17 +1,31 @@
+#calendar_wrapper h2{
+    color: #0E5B96;
+}
+
 .week_cal {
     position: relative;
 }
 
-.week_cal_nav {
-    position: absolute;
-    left: 0;
+.week_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .week_cal_nav a{
     text-decoration: none;
-    color: #444;
-    font-size: 1.5em;
-    padding: 2px 6px;
+    font-size: 1.4em;
+    margin-right: 18px;
+}
+
+.nav_arr i {
+    font-size: 1.8em;
+    font-weight: 600;
+    color: #999;
+}
+
+.nav_arr i:hover {
+    color: #888;
 }
 
 .week_body {
@@ -31,12 +45,12 @@
 
 .week_day {
     width: 14%;
-    border: 1px solid #DED9D9;
+    border: 1px solid #DDD;
     margin-left: 1px;
     margin-right: 1px;
 }
 
-.week_day .day_body {
+.day_body {
     min-height: 300px;
 }
 
@@ -45,16 +59,19 @@
         width: 96%;
     }
     
-    .week_day .day_body {
+    .day_body {
         min-height: 200px;
     }
 }
 
 .day_header {
-    background: #DED9D9;
+    background: #4C86B3;
+    color: #fff;
     text-align: center;
+    text-transform: uppercase;
     min-height: 3em;
     padding: 2px 2px;
+    letter-spacing: 2px;
 }
 
 .day_header span{
@@ -63,47 +80,31 @@
 }
 
 .today {
-    background: #aa6;
+    background: #FC6F37;
 }
 
 .day_body {
     padding: 5px;
+    padding-bottom: 15px;
+    height: 100%;
 }
 
 .event {
-    min-height: 100px;
-    padding: 4px;
+    min-height: 60px;
+    padding: 4px 2px;
     margin: 10px 0;
     border-radius: 5%;
-    background: #DED9D9;
+    text-align: center;
+    background: #FFD862;
+    color: #444;
 }
 
 
 
 
 /* Event forms -- -- */
-#event_form_cont {
-    position: fixed;
-    top: 100px;
-    width: 50%;
-    max-width: 400px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: none;
-}
 
-@media only screen and (max-width: 768px) {
-    .event_form_cont {
-        width: 96%;
-    }
-}
-
-
-#event_window {
-    display: none;
-}
-
-.side_window {
+.event_window {
     width: 30%;
     min-width: 250px;
     position: fixed;
@@ -115,27 +116,37 @@
     border: 1p solid #DED9D9;
 }
 
-
-/* Alerts -- */
-#alert {
+#event_details {
     display: none;
+}
+
+#event_form_cont {
+    display: none;
+}
+
+
+@media only screen and (max-width: 768px) {
+    .event_window {
+        width: 66%;
+        right: 2%;
+    }
+}
+
+
+.bg_marked {
+    background: #eee;
+}
+
+
+
+/* alerts */
+.fixed_alert {
     position: fixed;
-    top: 4px;
-    width: 90%;
-    max-width: 500px;
+    z-index: 100;
+    width: 700px;
+    max-width: 98%;
     left: 50%;
     transform: translateX(-50%);
-    padding: 20px 10px;
     text-align: center;
-    background: #eee;
-    border: 1px solid #DED9D9;
-    font-size: 1.2em;
 }
 
-.red {
-    color: #f00;
-}
-
-.green {
-    color: #060;
-}

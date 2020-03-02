@@ -26,7 +26,7 @@
     
 
     
-    <script src="<?php echo URL_ROOT ?>app/web/js/main.js"></script>
+    <script src="<?php echo URL_ROOT ?>web/js/main.js"></script>
 </body>
 </html>
 

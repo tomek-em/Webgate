@@ -1,57 +1,86 @@
 <?php
+/* 
+* calendar module: add and fetch events from database
+*/
 
 class Calendar extends Core {
-    
     private $db;
     
     public function __construct() {
-        $this->db = new Database;
-    }
-
-    
-    public function events() {
+        $this->events = new Events;
         
-        // CHANGE GET to Post !!!!!!!!!!!!!!!!!!1
-        if(($_SERVER['REQUEST_METHOD'] == 'GET') && (isset($_SESSION['user_id'])))  {
-             
+    }
+    
+    // get multiple events from database
+    public function getEvents() {
+        if(($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_SESSION['user_id'])))  {             
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-            $data = [];
+            $start = date("Y-m-d", strtotime($_POST["mon"]));
+            $end = date("Y-m-d", strtotime($_POST["sun"]));
             
-            // show events --
-            $type = 'week';
-            $date = '13-02-2020';
-            
-            $data['events'] = $this->getEvents($type, $date);
-        } 
-        
-        $this->render('calendar/events', $data);
+            $events = $this->events->getEventsByDate($start, $end);
+            echo json_encode($events);
+        }
     }
     
+    // get single event by id
+    public function getSingleEvent() {
+        if(($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_SESSION['user_id'])))  {             
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $id = trim($_POST['id']);
+            
+            $event = $this->events->getEventById($id);
+            echo json_encode($event);
+        }
+    }
     
-    // WEEK CALENDAR --------------------------------------
-    
-    public function week() {
-        //die('done');
-        // CHANGE GET to Post !!!!!!!!!!!!!!!!!!1
+    // add event
+    public function addEvent() {
         if(($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_SESSION['user_id'])))  {
-             
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-            $data = [];
-            
-            // show events --
-            $type = 'week';
-            $date = '13-02-2020';
-            
-            $data['events'] = $this->getEvents($type, $date);
+            $data['date'] = date("Y-m-d", strtotime($_POST["date"]));
+            $data['title'] = trim($_POST['title']);  
+            $data['body'] = trim($_POST['body']);  
+            $event_id = $this->events->addSingleEvent($data);
+            if ($event_id) {
+                echo $event_id;
+            } 
         } 
-        
-        $this->render('calendar/week', $data);
     }
     
+    // update event
+    public function updateEvent() {
+        if(($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_SESSION['user_id'])))  {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data['date'] = date("Y-m-d", strtotime($_POST["date"]));
+            $data['title'] = trim($_POST['title']);  
+            $data['body'] = trim($_POST['body']);   
+            $data['id'] = trim($_POST['id']); 
+            
+            $resp = $this->events->updateSingleEvent($data);
+            echo $res;
+        } 
+    }
+    
+    // delete event
+        public function deleteEvent() {
+        if(($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_SESSION['user_id'])))  {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $event_id = trim($_POST['id']);
+            
+            $response = $this->events->deleteSingleEvent($event_id);
+            if($response) {
+                $response = 'deleted';
+            } else {
+                $response = 'not';
+            }
+            echo $response;
+        }
+    }
     
     
     // get all events
-    public function getEvents($type, $date) {
+    public function getAllEvents($type, $date) {
         $this->db->query('SELECT * FROM events WHERE user_id = :user_id ORDER BY date DESC');
             $this->db->bind(':user_id', $_SESSION['user_id']);
             
@@ -59,92 +88,116 @@ class Calendar extends Core {
             return $results;
     }
     
+
+
     
-    public function getEventsByDate($data) {
-        //$start = '2020-02-02 00:00:00';
-        $this->db->query('SELECT * FROM events 
-        WHERE user_id = :user_id
-        AND date >= :start
-        AND date <= :end
-        ORDER BY date DESC');
-            $this->db->bind(':user_id', $_SESSION['user_id']);
-            $this->db->bind(':start', $data['start']);
-            $this->db->bind(':end', $data['end']);
-            
-            $results = $this->db->resultSet();
-            return $results;
+    // SHOW WEEK CALENDAR METHODES--------------------------------------
+    public function week() {
+        if(($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_SESSION['user_id'])))  {
+            // if there is date set from month calendar do sth...
+        } 
+        $this->render('calendar/week', $data);
+    }
+    
+    public function slots() {
+        if(($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_SESSION['user_id'])))  {
+            // if there is date set from month calendar do sth...
+        } 
+        $this->usr = new UserModel;
+        $data = $this->usr->getAllUsers();
+        $this->render('calendar/slots', $data);
     }
     
     
+    // show user event list
+    public function events() {        
+        $this->render('calendar/events', $data);
+    }
     
-    public function addEvent($data) {
-            $time = $data['date']. ' ';
-            $timestamp = strtotime($old_date);
-            $d = date("Y-m-d H:i:s");  
-            
-            $this->db->query('INSERT INTO events (title, user_id, body, type, date) VALUES(:title, :user_id, :body, :type, :date)');
-            $this->db->bind(':title', $data['title']);
-            $this->db->bind(':user_id', $_SESSION['user_id']);
-            $this->db->bind(':body', $data['body']);
-            $this->db->bind(':date', $data['date']);
-            $this->db->bind(':type', 0);
-            
-            //die('php: '. $d. ' js: '.$data['date']);
-            // execute
-            if($this->db->execute()) {
-                return true;
-            } else {
-                return false;
-            }
+    
+    public function test() {
+        $i = 0;
+        for ($k = '6.0'; $k <= '11.25'; $k += 0.25) {
+            $start[$i] = sprintf('%05.2f', $k);
+            $i++;
         }
+        echo print_r($start);
+        
+    }
     
     
+    // ------
     
-    // fetch week events 
-    
-    public function fetchWeekEvents() {
-        // CHANGE GET to Post !!!!!!!!!!!!!!!!!!1
-        if(($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_SESSION['user_id'])))  {
-             
+    //  get slots
+    public function getSlots() {
+        if($_SERVER['REQUEST_METHOD'] == 'POST')  {
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-            
             $start = date("Y-m-d", strtotime($_POST["mon"]));
             $end = date("Y-m-d", strtotime($_POST["sun"]));
-                
-            $data = [];
-            $data = [
-                'start' => $start,
-                'end' => $end
-            ];
-            //die($new_start);
-            $events = $this->getEventsByDate($data);
-            echo json_encode($events);
-        }
-    } //end fetchWeekEvents()
-    
-    
-    
-    public function add() {
-        if(($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_SESSION['user_id'])))  {
-             
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $usr = trim($_POST['usr']);
             
-            $date = date("Y-m-d", strtotime($_POST["date"]));
-            $data = [
-                'title' => trim($_POST['title']),  
-                'body' => trim($_POST['body']),  
-                'date' => $date
-                ];
+            // get user id
+            $this->usr = new UserModel;
+            $user_id = $this->usr->getUserByName($usr);
             
-            if($this->addEvent($data)) {
-                $resp = 'Event added';
-                
-            } else {
-                $resp = 'Error. Event nopt added';
-            }   
-            echo $resp;
+            $slots = $this->events->getSlotsByDate($start, $end, $user_id);
+            echo json_encode($slots);
         }
     }
+    
+    // set slots
+    public function setSlots() {
+        if(($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_SESSION['user_id'])))  {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $start = trim($_POST['start']);  
+            $data['stop'] = trim($_POST['stop']); 
+            $data['date'] = date("Y-m-d", strtotime($_POST['date']));
+            $week = trim($_POST['week']);
+            if ($week == 'true') { // week checkbox no tactive now
+                for ($i = 1; $i <= 5; $i++) {
+                    $d = 'd'.$i;
+                    $data['date'] = date("Y-m-d", strtotime($_POST[$d]));
+                    $res = $this->events->addUserSlots($data);
+                    
+                }
+            } else {
+                for ($k = $start; $k <= $data['stop']; $k += 0.25) {
+                    $data['start'] = sprintf('%05.2f', $k);
+                    $res = $this->events->addUserSlots($data);
+                }
+                
+            }
+            echo $res;
+        } 
+    }
+    
+    public function deleteSlots() {
+        if(($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_SESSION['user_id'])))  {
+            // delete slots for one day
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $date = date("Y-m-d", strtotime($_POST['date']));
+            
+            $response = $this->events->deleteSlotsByDate($date);
+            if($response) {
+                $response = 'slots deleted';
+            } else {
+                $response = 'slots not deleted';
+            }
+            echo $response;
+        }
+    }
+    
+    
+    public function bookSlot() {
+        if(($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_SESSION['user_id'])))  {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);   
+            $data['id'] = trim($_POST['id']); 
+            
+            $resp = $this->events->bookSingleSlot($data);
+            echo $res;
+        } 
+    }
+
     
 }
 
