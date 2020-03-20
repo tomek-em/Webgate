@@ -28,6 +28,8 @@ class Core {
         if(method_exists($this->currentModule, $method)) {
             $this->currentMethod = $method;
             $data = [];
+            $data[0] = $par;
+            
             call_user_func_array([$this->currentModule, $this->currentMethod], $data);
             unset($url[1]);
         } else {

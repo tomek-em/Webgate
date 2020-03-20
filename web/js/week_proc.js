@@ -47,50 +47,54 @@ function showAlert(type, text) {
 // EVENTS --------
 // show day event
 
+//fetch single event
+function getSingleEvent(id, type) {
+    const url = '/webgate/calendar/getsingleevent';
 
-
-// fetch events function
-function getWeekEvents(action, id, dates) {
-    const url = `/webgate/calendar/${action}`;
-    
-    // create XMR Obj
     let xhr = new XMLHttpRequest();
-
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     
-    if(action == 'getsingleevent') {
-        xhr.onload = function() {  
-            if(xhr.status == 200) {
-                let data = JSON.parse(xhr.responseText);
-                setEventData(data);
-            }
+    xhr.onload = function() {  
+        if(xhr.status == 200) {
+            let data = JSON.parse(xhr.responseText);
+            setEventData(data);
+            console.log(type);
+            if(type == 'form') document.getElementById('event_details').classList.add('d-block');
         }
-        xhr.send(`id=${id}`);
-        
-    } else {
+    }
+    xhr.send(`id=${id}`);
+}
+
+// fetch events function
+function getWeekEvents(id, dates) {
+    const url = '/webgate/calendar/getevents';
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
     xhr.onload = function() {  
         if(xhr.status == 200) {
             let events = {};
-                let data = JSON.parse(xhr.responseText);
-                for(let i in data) {
-                    events[i] = ({
-                        id: data[i].id,
-                        date: getShortDate(data[i].date)[0],
-                        day: getShortDate(data[i].date)[1],
-                        title: data[i].title,
-                        body: data[i].body,
-                        type: data[i].type,
-                        done: data[i].done
-                    });
-                    showEvent(events[i]);
-                }
-            } else {
-                console.log('Error');
+            let data = JSON.parse(xhr.responseText);
+            for(let i in data) {
+                events[i] = ({
+                    id: data[i].id,
+                    date: getShortDate(data[i].date)[0],
+                    day: getShortDate(data[i].date)[1],
+                    title: data[i].title,
+                    body: data[i].body,
+                    type: data[i].type,
+                    done: data[i].done
+                });
+                showEvent(events[i]);
             }
+        } else {
+            console.log('Error');
         }
-        xhr.send(`mon=${dates[0]}&sun=${dates[6]}`);
     }
+    xhr.send(`first=${dates[0]}&last=${dates[6]}`);
 }
 
   
@@ -102,8 +106,16 @@ function showEvent(event) {
     let event_div = document.createElement('div');
     event_div.classList.add('event');
     event_div.id = event['id'];
-    event_div.innerHTML = event['title'];
-
+    
+    let ev_title = document.createElement('h5');
+    let ev_body = document.createElement('p');
+    ev_title.innerHTML = event.title;
+    ev_body.innerHTML = event.body;
+    event_div.appendChild(ev_title);
+    event_div.appendChild(ev_body);
+    let type = event.type.toLowerCase();
+    event_div.classList.add(type);
+    
     cur_day.appendChild(event_div);
 }
     
@@ -143,7 +155,7 @@ function sendData(action, data) {
                 console.log('error');
             }       
         }
-    xhr.send(`title=${data.title}&body=${data.body}&date=${data.date}`);
+   console.log(data.type); xhr.send(`title=${data.title}&body=${data.body}&date=${data.date}&type=${data.type}`);
     }
     
     if(action == 'update'){
@@ -157,7 +169,7 @@ function sendData(action, data) {
                 console.log('error');
             }       
         }
-        xhr.send(`title=${data.title}&body=${data.body}&date=${data.date}&id=${data.id}`);
+        xhr.send(`title=${data.title}&body=${data.body}&date=${data.date}&type=${data.type}&id=${data.id}`);
     }
     
     if(action == 'delete'){
@@ -184,6 +196,7 @@ function setEventData(data){
     document.getElementById('ev_form_date').value = d;
     document.getElementById('ev_form_title').value = data.title;
     document.getElementById('ev_form_body').value = data.body;
+    document.getElementById('ev_type').value = data.type;
     document.getElementById('form_title').innerHTML = 'Edit Event';
 }   
     
@@ -191,10 +204,12 @@ function getFormData() {
     let date = document.getElementById('ev_form_date');
     let title = document.getElementById('ev_form_title');
     let body = document.getElementById('ev_form_body');
+    let type = document.getElementById('ev_type');
     let data = [];
     data['date'] = date.value;
     data['title'] = title.value;
     data['body'] = body.value;
+    data['type'] = type.value;
     
     console.log(data['title']);
     return data;
@@ -221,29 +236,32 @@ function setEventListeners() {
     // Event listener: click on event or day body
     document.querySelector('.week_cal').addEventListener('click', (e) => {
         if(e.target.classList.contains('day_body')) {
-            let day_name = e.target.parentElement.id;
-            let d = weekDates[day_name];
-            date = d.split("-").reverse().join("-");
-            document.getElementById('ev_form_date').value = date;
             
-            document.getElementById('form_title').innerHTML = 'Add Event';
-            form_container.setAttribute('data-action', 'add');
-            event_view.classList.remove('d-block');
-            form_container.classList.add('d-block');
-            clearEventForm();
-            
-            // get position
-            var rect = e.target.getBoundingClientRect();
-            let y_pos = Math.round( e.clientY - rect.top );
-            //console.log(events);
+            if(SESSION_USR == '') { 
+                showAlert('danger', 'You have to log in to add new event!');
+            } else {
+                let day_name = e.target.parentElement.id;
+                let d = weekDates[day_name];
+                date = d.split("-").reverse().join("-");
+                document.getElementById('ev_form_date').value = date;
+
+                document.getElementById('form_title').innerHTML = 'Add Event';
+                form_container.setAttribute('data-action', 'add');
+                event_view.classList.remove('d-block');
+                form_container.classList.add('d-block');
+                clearEventForm();
+
+                // get position
+                var rect = e.target.getBoundingClientRect();
+                let y_pos = Math.round( e.clientY - rect.top );
+            }
         } 
         // click on event
-        else if (e.target.classList.contains('event')) {
-            id = e.target.id;
+        else if (e.target.classList.contains('event') || e.target.parentElement.classList.contains('event')) {
+            if (e.target.classList.contains('event')) id = e.target.id;
+                else id = e.target.parentElement.id;
             form_container.classList.remove('d-block');
-            event_view.classList.add('d-block');
-            console.log(id);
-            getWeekEvents('getsingleevent', id);
+            getSingleEvent(id, 'form');
         }
     });
     
@@ -289,7 +307,7 @@ function setEventListeners() {
         event_view.classList.remove('d-block');
         form_container.classList.add('d-block');
         form_container.setAttribute('data-action', 'edt');
-        getWeekEvents('getsingleevent', id);
+        getSingleEvent(id);
         }); 
     
     // delete button
@@ -365,7 +383,7 @@ function clearCalendar() {
 function createWeekCalendar(customDate, weekIndex) {
     let dates = [];
     let date = new Date();
-    if (customDate == 10) {
+    if (customDate != 0) {
         date = new Date(customDate);
     }
     date.setDate(date.getDate() + weekIndex);
@@ -379,13 +397,14 @@ function createWeekCalendar(customDate, weekIndex) {
     }
     setNewDates(dates); // assign dates to object for event listeners
     showWeekDates(dates);
-    getWeekEvents('getevents', 0, dates);
+    if(SESSION_USR) getWeekEvents( 0, dates);
 }
 
 
 // init function
 function weekCalendarInit(date) {
     createWeekCalendar(date, 0);
+    //showAlert('success', 'Click on calendar to add new event');
 
     // event listeners: previous/ next button
     let weekIndex = 0;

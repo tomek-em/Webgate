@@ -2,7 +2,7 @@
 
 class User extends Core {
     public function __construct(){
-        $this->userModel = new UserModel;
+        $this->userModel = new Usr;
     }
     
     // REGISTER

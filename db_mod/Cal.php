@@ -1,6 +1,6 @@
 <?php
 
-class Events {
+class Cal {
     private $db;
     
     public function __construct() {
@@ -37,8 +37,8 @@ class Events {
         $this->db->bind(':title', $data['title']);
         $this->db->bind(':user_id', $_SESSION['user_id']);
         $this->db->bind(':body', $data['body']);
+        $this->db->bind(':type', $data['type']);
         $this->db->bind(':date', $data['date']);
-        $this->db->bind(':type', 0);
 
         if($this->db->execute()) {
             $this->db->query('SELECT id FROM events WHERE user_id =         :user_id ORDER BY id DESC LIMIT 1');
@@ -58,7 +58,7 @@ class Events {
         $this->db->bind(':date', $data['date']);
         $this->db->bind(':title', $data['title']);
         $this->db->bind(':body', $data['body']);
-        $this->db->bind(':type', 0);
+        $this->db->bind(':type', $data['type']);
 
         // execute
         if($this->db->execute()) {

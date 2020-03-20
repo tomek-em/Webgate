@@ -158,7 +158,7 @@
                 </div>
                 <!-- End time -->
                 <div class="form-group mt-4 time_group">
-                    <label for="start_time">End Time: <sup>*</sup></label>
+                    <label for="end_time">End Time: <sup>*</sup></label>
                     <select name="end_time" id="end_time">
                         <?php
                             for($hours=6; $hours<20; $hours++){
@@ -169,11 +169,13 @@
                         ?>
                     </select>
                 </div>
+<!--
                 
                 <div class="form-group mt-4 time_group">
                     <input type="checkbox" name="week" id="chbox_week" >
                     <label for="week">Use this for whole week</label>
                 </div>
+-->
                 
                 <div class="form-group">
                     <label for="name">Date: <sup>*</sup></label>

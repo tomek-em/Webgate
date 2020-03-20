@@ -154,6 +154,16 @@
                     <input type="date" name="date" id="ev_form_date" class="form-control form-control-lg" value="">
                     
                 </div>
+                
+                <!-- Event type -->
+                <div class="form-group mt-4 time_group">
+                    <label for="event type">Event Type:</label>
+                    <select name="event type" class="form_select" id="ev_type">
+                        <option value="Type1" selected>Type1</option>
+                        <option value="Type2">Type2</option>
+                        <option value="Type3">Type3</option>
+                    </select>
+                </div>
 
                 <div class="row">
                     <div class="col mt-4">
@@ -167,8 +177,6 @@
         </div>
         
         
-        
-        
     </div> <!-- End of content div -->
     
     <footer class="footer bg-dark text-light">
@@ -180,12 +188,9 @@
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    
-    
     <script>
-        
-        let current_date = 0;
-        // date from month claendar
+        let current_date = <?php echo json_encode($data['date']); ?>;
+        let SESSION_USR = '<?php echo $_SESSION['user_name']; ?>';
     </script>
     <script src="<?php echo URL_ROOT ?>web/js/week_proc.js"></script>
 </body>

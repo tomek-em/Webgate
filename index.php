@@ -11,9 +11,11 @@
     require_once('modules/Home.php');
     require_once('modules/User.php');
     require_once('modules/Calendar.php');
+    require_once('modules/Bookmarks.php');
     
-    require_once('models/UserModel.php');
-    require_once('models/Events.php');
+    require_once('db_mod/Usr.php');
+    require_once('db_mod/Cal.php');
+    require_once('db_mod/BMark.php');
 
     $init = new Core;
     

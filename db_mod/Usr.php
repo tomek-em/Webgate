@@ -1,6 +1,6 @@
 <?php
 
-class UserModel {
+class Usr {
     private $db;
     
     public function __construct() {

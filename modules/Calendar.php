@@ -7,7 +7,7 @@ class Calendar extends Core {
     private $db;
     
     public function __construct() {
-        $this->events = new Events;
+        $this->events = new Cal;
         
     }
     
@@ -15,8 +15,8 @@ class Calendar extends Core {
     public function getEvents() {
         if(($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_SESSION['user_id'])))  {             
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-            $start = date("Y-m-d", strtotime($_POST["mon"]));
-            $end = date("Y-m-d", strtotime($_POST["sun"]));
+            $start = date("Y-m-d", strtotime($_POST["first"]));
+            $end = date("Y-m-d", strtotime($_POST["last"]));
             
             $events = $this->events->getEventsByDate($start, $end);
             echo json_encode($events);
@@ -41,6 +41,7 @@ class Calendar extends Core {
             $data['date'] = date("Y-m-d", strtotime($_POST["date"]));
             $data['title'] = trim($_POST['title']);  
             $data['body'] = trim($_POST['body']);  
+            $data['type'] = trim($_POST['type']);  
             $event_id = $this->events->addSingleEvent($data);
             if ($event_id) {
                 echo $event_id;
@@ -55,6 +56,7 @@ class Calendar extends Core {
             $data['date'] = date("Y-m-d", strtotime($_POST["date"]));
             $data['title'] = trim($_POST['title']);  
             $data['body'] = trim($_POST['body']);   
+            $data['type'] = trim($_POST['type']);   
             $data['id'] = trim($_POST['id']); 
             
             $resp = $this->events->updateSingleEvent($data);
@@ -92,10 +94,20 @@ class Calendar extends Core {
 
     
     // SHOW WEEK CALENDAR METHODES--------------------------------------
-    public function week() {
+    public function month() {
         if(($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_SESSION['user_id'])))  {
             // if there is date set from month calendar do sth...
         } 
+        $this->render('calendar/month', $data);
+    }
+    
+    public function week($data) {
+        if($_SERVER['REQUEST_METHOD'] == 'POST')  {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $data['date'] = trim($_POST['date']); 
+        } else {
+            $data['date'] = 0;
+        }
         $this->render('calendar/week', $data);
     }
     
@@ -103,7 +115,7 @@ class Calendar extends Core {
         if(($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_SESSION['user_id'])))  {
             // if there is date set from month calendar do sth...
         } 
-        $this->usr = new UserModel;
+        $this->usr = new Usr;
         $data = $this->usr->getAllUsers();
         $this->render('calendar/slots', $data);
     }
@@ -126,7 +138,7 @@ class Calendar extends Core {
     }
     
     
-    // ------
+    // SLOTS
     
     //  get slots
     public function getSlots() {
@@ -137,7 +149,7 @@ class Calendar extends Core {
             $usr = trim($_POST['usr']);
             
             // get user id
-            $this->usr = new UserModel;
+            $this->usr = new Usr;
             $user_id = $this->usr->getUserByName($usr);
             
             $slots = $this->events->getSlotsByDate($start, $end, $user_id);

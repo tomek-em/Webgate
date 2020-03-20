@@ -23,7 +23,7 @@
 
                     <div class="row">
                         <div class="col mt-4">
-                            <input type="submit" value="Log In" class="btn btn-success btn-block">
+                            <input type="submit" value="Log In" class="btn btn_blue btn-block">
                         </div>
                         <div class="col mt-4">
                             <a href="<?php echo URL_ROOT ?>" class="btn btn-secondary btn-block">Cancel</a>

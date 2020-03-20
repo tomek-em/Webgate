@@ -152,6 +152,8 @@ function deleteSlots(date) {
             showAlert('success', 'Slot deleted');
             clearCalendar();
             createWeekCalendar(weekDates['mon'].split("-").reverse().join("-"), 0);
+            
+            console.log(res);
         } else {
             console.log('error');
         }       
@@ -316,20 +318,9 @@ function setEventListeners() {
         let start = document.getElementById('start_time').value;
         let stop = document.getElementById('end_time').value;
         slot.date = document.getElementById('form_date').value;
+        //change below if want to add slots for multiple days
+        slot.week = 'false';
         
-        let whole = document.getElementById('chbox_week').checked;
-        if (whole) {
-            // TODO Validation: check if week has no slots
-            
-            slot.week = 'true'; 
-            slot.d1 = weekDates['mon'].split("-").reverse().join("-");
-            slot.d2 = weekDates['tue'].split("-").reverse().join("-");
-            slot.d3 = weekDates['wed'].split("-").reverse().join("-");
-            slot.d4 = weekDates['thu'].split("-").reverse().join("-");
-            slot.d5 = weekDates['fri'].split("-").reverse().join("-");
-        } else {
-            slot.week = 'false';
-        }
         if(start < stop) {
             form_container.classList.remove('d-block');
             slot.start = timeToNum(start);
@@ -448,6 +439,7 @@ function createWeekCalendar(customDate, weekIndex) {
 // init function
 function weekCalendarInit(date) {
     createWeekCalendar(date, 0);
+    showAlert('success', 'Select user to book a time');
 
     // event listeners: previous/ next button
     let weekIndex = 0;
