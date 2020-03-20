@@ -87,6 +87,7 @@
     padding: 5px;
     padding-bottom: 15px;
     height: 100%;
+    display: none;
 }
 
 .event {
