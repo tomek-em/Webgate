@@ -281,8 +281,7 @@ function setEventListeners() {
                         delete_slots_date = date;
                     } else {
                         console.log('no slots!');
-                        form_container.classList.add('d-block');
-                        
+                        form_container.classList.add('slide');
                     }
                 } else {
                     // book slot
@@ -322,7 +321,7 @@ function setEventListeners() {
         slot.week = 'false';
         
         if(start < stop) {
-            form_container.classList.remove('d-block');
+            form_container.classList.remove('slide');
             slot.start = timeToNum(start);
             slot.stop = timeToNum(stop);
             sendSlotSet(slot);
@@ -335,7 +334,7 @@ function setEventListeners() {
     
     // cancel buttons
     cancel_form.addEventListener('click', (e) => {
-        form_container.classList.remove('d-block');
+        form_container.classList.remove('slide');
     });
 }
 

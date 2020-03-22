@@ -59,8 +59,10 @@ function getSingleEvent(id, type) {
         if(xhr.status == 200) {
             let data = JSON.parse(xhr.responseText);
             setEventData(data);
-            console.log(type);
-            if(type == 'form') document.getElementById('event_details').classList.add('d-block');
+            if(type == 'form') {
+                document.getElementById('event_view').classList.add('d-block');
+                document.querySelector('.event_window').classList.add('slide');
+            }
         }
     }
     xhr.send(`id=${id}`);
@@ -228,7 +230,7 @@ function setEventListeners() {
     const form = document.getElementById('event_form');
     const form_title = document.getElementById('ev_form_title');
     const cancel_form = document.getElementById('cancel_form_btn');
-    const event_view = document.getElementById('event_details');
+    const event_view = document.getElementById('event_view');
     const edit_btn = document.getElementById('edit_btn');
     const delete_btn = document.getElementById('delete_btn');
     const hide_view_btn = document.getElementById('cancel_view_btn');
@@ -248,6 +250,7 @@ function setEventListeners() {
                 document.getElementById('form_title').innerHTML = 'Add Event';
                 form_container.setAttribute('data-action', 'add');
                 event_view.classList.remove('d-block');
+                document.querySelector('.event_window').classList.add('slide');
                 form_container.classList.add('d-block');
                 clearEventForm();
 
@@ -282,6 +285,7 @@ function setEventListeners() {
             showFormAlert(type, info);
         } else {
             form_container.classList.remove('d-block');
+            document.querySelector('.event_window').classList.remove('slide');
             if (atr == 'add') {
                 sendData('add', data);
             } 
@@ -295,11 +299,13 @@ function setEventListeners() {
     // cancel buttons
     cancel_form.addEventListener('click', (e) => {
         form_container.classList.remove('d-block');
+        document.querySelector('.event_window').classList.remove('slide');
         document.getElementById('ev_form_title').value='';
         document.getElementById('ev_form_body').value='';
     });
     hide_view_btn.addEventListener('click', (e) => {
         event_view.classList.remove('d-block');
+        document.querySelector('.event_window').classList.remove('slide');
     });
     
     // edit button
@@ -313,6 +319,7 @@ function setEventListeners() {
     // delete button
     delete_btn.addEventListener('click', (e) => {
         event_view.classList.remove('d-block');
+        document.querySelector('.event_window').classList.remove('slide');
         data['id'] = id;
         sendData('delete', data);
     });

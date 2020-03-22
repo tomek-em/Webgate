@@ -21,7 +21,7 @@
 
 <body>
     <div class="content">
-        <header>
+        <header class="nav_dark">
             <!-- Navbar -->
             <?php require(APP_ROOT.'inc/nav.php'); ?>
         </header>
@@ -108,19 +108,18 @@
                 </div>
             </div>
         </div> <!-- End of Container -- -->
-        
+    </div>
         
         
         
         <!--  Event forms -->
         
-        
         <!-- Event Window ------ -->
-        <div class="event_window" id="event_details" >
+        <div class="event_window">
             <div class="container mt-4" id="event_view">
                 <h3 id="ev_title">Event title</h3>
                 <p id="ev_body">Event body</p>
-                <div class="row mt-5">
+                <div class="row mt-5 mb-5">
                     <div class="col mt-3">
                         <a href="#" class="btn btn-primary btn-block" id="edit_btn">Edit</a>
                     </div>
@@ -132,48 +131,49 @@
                     </div>
                 </div>
             </div>
-        </div> <!-- End of event window -->
             
         <!-- Event form if add new or edit event -->
-        <div class="card card-body bg-light mb-4 event_window" id="event_form_cont">
-            <h2 id="form_title">Add event</h2>
-            <form action='' method="post" id="event_form">
-                <div class="form-group">
-                    <label for="name">Event title: <sup>*</sup></label>
-                    <input type="text" name="title" id="ev_form_title" class="form-control form-control-lg " value="">
-                    
-                </div>
-                <div class="form-group">
-                    <label for="name">Event text: </label>
-                    <textarea name="body" id="ev_form_body" class="form-control form-control-lg"></textarea>
-                       
-                </div>
+        <div class="card card-body bg-light event_form" id="event_form_cont">
+            <div id = "event_form">
+                <h2 id="form_title">Add event</h2>
+                <form action='' method="post">
+                    <div class="form-group">
+                        <label for="name">Event title: <sup>*</sup></label>
+                        <input type="text" name="title" id="ev_form_title" class="form-control form-control-lg " value="">
 
-                <div class="form-group">
-                    <label for="name">Date: <sup>*</sup></label>
-                    <input type="date" name="date" id="ev_form_date" class="form-control form-control-lg" value="">
-                    
-                </div>
-                
-                <!-- Event type -->
-                <div class="form-group mt-4 time_group">
-                    <label for="event type">Event Type:</label>
-                    <select name="event type" class="form_select" id="ev_type">
-                        <option value="Type1" selected>Type1</option>
-                        <option value="Type2">Type2</option>
-                        <option value="Type3">Type3</option>
-                    </select>
-                </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Event text: </label>
+                        <textarea name="body" id="ev_form_body" class="form-control form-control-lg"></textarea>
 
-                <div class="row">
-                    <div class="col mt-4">
-                        <input type="submit" value="OK" class="btn btn_blue btn-block">
                     </div>
-                    <div class="col mt-4">
-                        <a href="#" class="btn btn-secondary btn-block" id="cancel_form_btn">Cancel</a>
+
+                    <div class="form-group">
+                        <label for="name">Date: <sup>*</sup></label>
+                        <input type="date" name="date" id="ev_form_date" class="form-control form-control-lg" value="">
+
                     </div>
-                </div>
-            </form>
+
+                    <!-- Event type -->
+                    <div class="form-group mt-4 time_group">
+                        <label for="event type">Event Type:</label>
+                        <select name="event type" class="form_select" id="ev_type">
+                            <option value="Type1" selected>Type1</option>
+                            <option value="Type2">Type2</option>
+                            <option value="Type3">Type3</option>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <div class="col mt-4">
+                            <input type="submit" value="OK" class="btn btn_blue btn-block">
+                        </div>
+                        <div class="col mt-4">
+                            <a href="#" class="btn btn-secondary btn-block" id="cancel_form_btn">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
         
         
@@ -186,13 +186,12 @@
     </footer>
     
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script>
         let current_date = <?php echo json_encode($data['date']); ?>;
         let SESSION_USR = '<?php echo $_SESSION['user_name']; ?>';
     </script>
     <script src="<?php echo URL_ROOT ?>web/js/week_proc.js"></script>
+    <script src="<?php echo URL_ROOT ?>web/js/main.js"></script>
 </body>
 </html>
 

@@ -303,8 +303,8 @@ function setMainPage() {
     } else {
         createBookmarkList(false);
     }
-}
-
-document.addEventListener('DOMContentLoaded', setMainPage, false);
+}    
+    
+document.addEventListener('DOMContentLoaded', setMainPage, false);   
 
 }());
