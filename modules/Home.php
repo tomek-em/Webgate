@@ -2,7 +2,8 @@
 
 class Home extends Core {
   public function __construct() {
-      $this->render();
+      $data = [];
+      $this->render('index', $data);
   }
     
 }

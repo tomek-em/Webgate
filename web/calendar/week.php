@@ -4,19 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo APP_NAME; ?> </title>
-    
+
     <!-- Google fonts -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Poppins&display=swap" rel="stylesheet">
-    
+
     <!-- Bootstrap core CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Font awesome -->
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    
+
     <link rel="stylesheet" href="<?php echo URL_ROOT ?>web/css/week.css">
     <link rel="stylesheet" href="<?php echo URL_ROOT ?>web/css/main.css">
-    
+
 </head>
 
 <body>
@@ -25,26 +25,26 @@
             <!-- Navbar -->
             <?php require(APP_ROOT.'inc/nav.php'); ?>
         </header>
-        
+
         <div class="container-fluid" id="calendar_wrapper">
             <div class="row">
                 <div class="col-lg-10 mx-auto">
-                    
+
                     <div class="row mt-4 mb-3">
                         <div class="col-lg-12 text-center">
                             <h2>Webgate event calendar</h2>
                         </div>
-      
+
                     </div>
-                    
+
                     <!-- Show week events   -->
-                    
+
                     <div class="week_cal">
                         <div class="week_header mb-2">
                             <div class="week_cal_nav">
                                 <a href="#" id="prev" class="nav_arr"> <i class="fa fa-chevron-circle-left"></i> </a>
                                 <a href="#" id="next" class="nav_arr">  <i class="fa fa-chevron-circle-right"></i> </a>
-                            </div>    
+                            </div>
                         </div>
                         <div class="week_body">
                             <div class="week_day" id="mon">
@@ -107,31 +107,38 @@
                     </div>
                 </div>
             </div>
+
         </div> <!-- End of Container -- -->
+
+        <!-- Spinner on loading -->
+        <img id="spinner" class="spinner" src="<?php echo URL_ROOT.'web/img/spinner.gif'; ?>">
     </div>
-        
-        
-        
+
+
+
         <!--  Event forms -->
-        
+
         <!-- Event Window ------ -->
         <div class="event_window">
             <div class="container mt-4" id="event_view">
                 <h3 id="ev_title">Event title</h3>
                 <p id="ev_body">Event body</p>
                 <div class="row mt-5 mb-5">
-                    <div class="col mt-3">
-                        <a href="#" class="btn btn-primary btn-block" id="edit_btn">Edit</a>
+                    <div class="col-md-6 mt-3">
+                        <a href="#" class="btn btn_blue btn_fill" id="done_btn">Mark Done</a>
                     </div>
-                    <div class="col mt-3">
+                    <div class="col-md-6 mt-3">
+                        <a href="#" class="btn btn_blue btn_fill" id="edit_btn">Edit</a>
+                    </div>
+                    <div class="col-md-6 mt-3">
                         <a href="#" class="btn btn-danger btn-block" id="delete_btn">Delete</a>
                     </div>
-                    <div class="col mt-3">
+                    <div class="col-md-6 mt-3">
                         <a href="#" class="btn btn-secondary btn-block" id="cancel_view_btn">Cancel</a>
                     </div>
                 </div>
             </div>
-            
+
         <!-- Event form if add new or edit event -->
         <div class="card card-body bg-light event_form" id="event_form_cont">
             <div id = "event_form">
@@ -161,6 +168,7 @@
                             <option value="Type1" selected>Type1</option>
                             <option value="Type2">Type2</option>
                             <option value="Type3">Type3</option>
+                            <option value="Wait">Wait</option>
                         </select>
                     </div>
 
@@ -175,16 +183,15 @@
                 </form>
             </div>
         </div>
-        
-        
+
     </div> <!-- End of content div -->
-    
+
+
     <footer class="footer bg-dark text-light">
         <div class="container">
             <p class="">Sticky Footer</p>
         </div>
     </footer>
-    
 
     <script>
         let current_date = <?php echo json_encode($data['date']); ?>;
@@ -194,4 +201,3 @@
     <script src="<?php echo URL_ROOT ?>web/js/main.js"></script>
 </body>
 </html>
-

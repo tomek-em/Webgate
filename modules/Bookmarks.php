@@ -29,6 +29,7 @@ class Bookmarks extends Core {
             echo json_encode($bookmarks);
         }
     }
+
     
     // delete bookmark
     public function deleteBookmark() {

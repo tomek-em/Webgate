@@ -23,7 +23,7 @@ class BMark {
     }
     
     // get bookmarks
-    public function getBookmarksByUser($start, $end){
+    public function getBookmarksByUser(){
         $this->db->query('SELECT * FROM bookmarks 
                 WHERE user_id = :user_id
                 ORDER BY title ASC');

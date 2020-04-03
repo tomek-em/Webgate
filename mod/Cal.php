@@ -53,7 +53,7 @@ class Cal {
     
     // update event
     public function updateSingleEvent($data){
-        $this->db->query('UPDATE events SET date = :date, title = :title, body = :body, type = :type WHERE id = :id');
+        $this->db->query('UPDATE events SET date = :date, title = :title, body = :body, type = :type, done = 0 WHERE id = :id');
         $this->db->bind(':id', $data['id']);
         $this->db->bind(':date', $data['date']);
         $this->db->bind(':title', $data['title']);
@@ -72,6 +72,19 @@ class Cal {
     public function deleteSingleEvent($id) {
         $this->db->query('DELETE FROM events WHERE id = :id');
         $this->db->bind(':id', $id);
+        
+        if($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    // mark event done
+    public function markEventDone($id) {
+        $this->db->query('UPDATE events SET done = :done WHERE id = :id');
+        $this->db->bind(':id', $id);
+        $this->db->bind(':done', 1);
         
         if($this->db->execute()) {
             return true;

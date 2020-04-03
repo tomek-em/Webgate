@@ -2,7 +2,6 @@
 
 class Core {
     public function __construct() {
-
         if (isset($_GET['url'])) {
             // default module name
             $moduleName = 'Home';
@@ -23,21 +22,17 @@ class Core {
         // create new instance of module class
         $this->currentModule = new $mod;
         unset($url[0]);
-        
         // call module class method if exists
         if(method_exists($this->currentModule, $method)) {
             $this->currentMethod = $method;
             $data = [];
             $data[0] = $par;
-            
             call_user_func_array([$this->currentModule, $this->currentMethod], $data);
             unset($url[1]);
         } else {
             //$this->currentModule
         }
-        
-        
-        
+          
     } // End of process 
     
     

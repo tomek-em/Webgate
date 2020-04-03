@@ -4,17 +4,17 @@
 
 (function() {
 let bookmarks = [];
-    
+
 function showAlert(type, text) {
-    const cont = document.querySelector('.content');
-    const main_cont = document.querySelector('main');
+    const cont = document.querySelector('header');
+    const before = document.querySelector('nav');
     const alert = document.createElement('div');
     alert.id = "alert";
     alert.className = `alert alert-${type} fixed_alert`;
     alert.appendChild(document.createTextNode(text));
-    cont.insertBefore(alert, main_cont );
-    setTimeout(() => document.querySelector('.alert').remove(), 3000);
-}    
+    cont.insertBefore(alert, before );
+    setTimeout(() => document.querySelector('#alert').remove(), 3000);
+}
 
 function showBookmarkCont() {
     document.getElementById('bookmark_input').value = '';
@@ -25,6 +25,81 @@ function showBookmarkCont() {
 
     document.querySelector('#bookmark_cont').classList.toggle('d-block');
 }
+
+function getRandom(num) {
+  return Math.floor(Math.random()*num);
+}
+
+function getTime() {
+  let date = new Date();
+  let time = {
+    day: date.getDay()-1,
+    hour: date.getHours()
+  }
+}
+
+function showPictureInfo() {
+  let date = new Date();
+  let day = date.getDay()-1;
+  let time = date.getHours();
+  //day = 4;
+  let loc_num;
+
+  let europe = {
+    loc: ['gda', 'pol'],
+    cur_loc: '',
+    day_time: ''
+   };
+
+  let world = {
+    loc: [ 'nyc', 'ama'],
+    time_zone: [6, 4],
+    cur_loc: '',
+    day_time: ''
+  };
+
+  const picture = document.getElementById('hero_img');
+  const place = document.getElementById('pic_name');
+  const credit = document.querySelector('picture_details a');
+
+  europe.cur_loc = europe.loc[getRandom(2)];
+  world.cur_loc = world.loc[getRandom(2)];
+
+  loc_num = Math.floor(day/4);
+  europe.cur_loc = europe.loc[loc_num];
+  world.cur_loc = world.loc[loc_num];
+
+  if(time < 5 || time >= 19) {
+    europe.day_time = 'n';
+  } else if ((time >= 5 && time < 7) || (time >= 17 && time < 19)) {
+    europe.day_time = 'g';
+  } else {
+    europe.day_time = 'd';
+  }
+
+  console.log({ loc_num, europe, world });
+  //picture.style.backgroundImage = "url(web/img/pic2-min.jpg)";
+
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function showTime() {
+    let timer = document.querySelector('#timer');
+    let time = new Date();
+    let h = String(time.getHours()).padStart(2, '0');
+    let min = String(time.getMinutes()).padStart(2, '0');
+    let sec = String(time.getSeconds()).padStart(2, '0');
+
+    timer.innerHTML = `${h}:${min}`;
+    //await sleep(60000);
+    //showTime();
+}
+
+
+/* BOKMARKS */
 
 function filterBookmarks() {
     let cont = document.querySelector('#bookmark_cont');
@@ -167,34 +242,12 @@ function showLocation(loc) {
     document.querySelector('#location_name').innerHTML = `${loc}, `;
 }
 
-// get bookmarks
-//function getWeather2(lat, lon) {
-//    let temperature_deg = document.querySelector('#temperature_degree');
-//    let weather_description = document.querySelector('#weather_description');
-//    
-//    let url = `Access-Control-Allow-Origin : https://api.darksky.net/forecast/9afe9add45c0ea9bd31b62c5c3b7d0bf/37.8267,-122.4233`;
-//    let xhr = new XMLHttpRequest();
-//
-//    xhr.open('POST', url, true);
-//    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-//
-//    xhr.onload = function() {
-//        if(xhr.status == 200) {
-//        let res = JSON.parse(xhr.responseText);
-//            
-//        console.log(res);    
-//        } else {
-//            console.log('error');
-//        }
-//    }
-//    xhr.send();
-//}
 
 function getWeather(lat, lon) {
     const temperature_deg = document.querySelector('#temperature_degree');
     const weather_description = document.querySelector('#weather_description');
     const weather_credit = document.querySelector('#weather_credit');
-    
+
     // using promises
     const proxy = 'https://cors-anywhere.herokuapp.com/';
     const api = `${proxy}https://api.darksky.net/forecast/9afe9add45c0ea9bd31b62c5c3b7d0bf/${lat},${lon}?units=si`;
@@ -207,7 +260,7 @@ function getWeather(lat, lon) {
             let description = data.currently.summary;
             temperature_deg.textContent = `${temp} C `;
             weather_description.textContent = description;
-        
+
             weather_credit.innerHTML = 'Powered by Dark Sky';
         })
     .catch(err => console.log(err));
@@ -243,6 +296,14 @@ function addEventListeners() {
     let form_cont = document.querySelector('#bookmark_form_cont');
     let main_area = document.querySelector('.hero_image');
     let search_input = document.querySelector('#bookmark_input');
+    let main_cont = document.getElementById('main_cont');
+
+    let dot_one = document.getElementById('dot_one');
+    let dot_two = document.getElementById('dot_two');
+    let main_wid = document.getElementById('main_box');
+    let month_wid = document.getElementById('cal_box');
+    let calendar = document.getElementById('calendar');
+    let event_text = document.getElementById('event_text');
 
     // event - show add bookmark form
     document.querySelector('#new_bookmark_btn').addEventListener('click', (e) => {
@@ -291,20 +352,45 @@ function addEventListeners() {
             let bookmark_id = e.target.parentElement.id;
             deleteBookmark(bookmark_id);
         }
+    });
+
+    // event listener - change view
+    dot_one.addEventListener('click', (e) => {
+      dot_one.classList.add('active');
+      dot_two.classList.remove('active');
+      month_wid.classList.add('aside_right');
+      main_wid.classList.remove('aside_left');
+      event_text.classList.remove('d-block');
+    });
+
+    dot_two.addEventListener('click', (e) => {
+      dot_one.classList.remove('active');
+      dot_two.classList.add('active');
+      calendar.classList.add('main_cal');
+      main_wid.classList.add('aside_left');
+      month_wid.classList.remove('aside_right');
+      event_text.classList.add('d-block');
+    });
+
+    document.getElementById('hide_wid').addEventListener('click', (e) => {
+      main_cont.classList.toggle('d-none');
     })
-}
+};
 
 // ----
 function setMainPage() {
     getLocation();
+    showTime();
+    showPictureInfo();
+    setInterval (showTime, 60000);
     addEventListeners();
     if (SESSION_USR) {
         getBookmarks();
     } else {
         createBookmarkList(false);
     }
-}    
-    
-document.addEventListener('DOMContentLoaded', setMainPage, false);   
+}
+
+document.addEventListener('DOMContentLoaded', setMainPage, false);
 
 }());

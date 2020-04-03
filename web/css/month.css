@@ -28,8 +28,8 @@
     text-decoration: none;
 }
 
-#left_col {
-    background: #F0FFFF ;
+#month_wrapper #left_col {
+    background: #F0FFFF;
     min-height: 460px;
     box-shadow: -5px 5px 5px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.2);
 }
@@ -74,11 +74,11 @@
 }
 
 #month_body {
-    
+
 }
 
 #month_body tr {
-    
+
 }
 
 #month_body tr td {
@@ -89,14 +89,14 @@
     border-top: 1px solid #888;
     color: #222;
     height: 60px;
-    
+
 }
 
 .month_cal_cell {
     width: 60px;
     text-align: center;
     position: relative;
-    
+
 }
 
 .day_link{
@@ -138,7 +138,7 @@
     color: #FFF;
     font-size: 1.2em;
     letter-spacing: 2px;
-    
+
     padding: 30px;
     width: 90%;
     text-align: center;

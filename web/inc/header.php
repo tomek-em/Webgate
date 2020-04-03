@@ -6,12 +6,13 @@
 
     <title><?php echo APP_NAME; ?> </title>
 
-    <!-- Font awesome -->
+    <!-- Google fonts -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,900|Poppins|Staatliches&display=swap" rel="stylesheet">
 
     <!-- Bootstrap core CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="<?php echo URL_ROOT ?>web/css/month.css">
     <link rel="stylesheet" href="<?php echo URL_ROOT ?>web/css/main.css">
 
 </head>

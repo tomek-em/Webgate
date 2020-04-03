@@ -1,7 +1,8 @@
 <nav class="navbar navbar-expand-md">
         <div class="container-fluid">
-            
-            <button class="navbar-toggler ml-auto" id="hamburger" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+
+            <button class="navbar-toggler ml-auto" id="hamburger" type="button" data-toggle="collapse"
+            data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -20,16 +21,19 @@
                             <a class="nav-link" id="load-link" href="<?php echo URL_ROOT ?>calendar/week">Week</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" id="load-link" href="<?php echo URL_ROOT ?>calendar/events">More events</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" id="load-link" href="<?php echo URL_ROOT ?>calendar/slots">Book</a>
                         </li>
-                        <li class="nav-item dropdown">
+                        <!-- <li class="nav-item dropdown">
                             <a class="nav-link" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="" aria-expanded="">Dropdown</a>
                             <div class="dropdown-menu" aria-labelledby="dropdown01">
                                 <a class="dropdown-item" href="#">Action</a>
                                 <a class="dropdown-item" href="#">Another action</a>
                                 <a class="dropdown-item" href="#">Something else here</a>
                             </div>
-                        </li>
+                        </li> -->
                     </ul>
                     <ul class="navbar-nav login_box">
                         <div class="login_cont">

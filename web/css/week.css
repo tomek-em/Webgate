@@ -1,3 +1,13 @@
+@import url('https://fonts.googleapis.com/css?family=Patrick+Hand&display=swap');
+
+.spinner {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    top: 46%;
+    left: 50%;
+    transform: translateX(-50%) scale(0.5);
+}
 
 #calendar_wrapper h2{
     color: #0E5B96;
@@ -59,7 +69,7 @@
     .week_day {
         width: 96%;
     }
-    
+
     .day_body {
         min-height: 200px;
     }
@@ -100,6 +110,7 @@
     overflow-y: hidden;
     background: #FFD862;
     color: #444;
+    cursor: pointer;
 }
 
 .type1 {
@@ -114,13 +125,19 @@
     background-color: #4C86B3;
 }
 
+.done {
+    background-color: #ccc;
+}
+
 .event h5 {
     font-size: 16px;
     font-weight: 600;
 }
 
 .event p {
-    font-size: 14px;
+    font-size: 16px;
+    text-align: center;
+    font-family: 'Patrick Hand', cursive;
 }
 
 
@@ -132,13 +149,13 @@
     min-width: 250px;
     position: fixed;
     right: 0;
-    top: 10px;
+    top: 50px;
     height: 80vh;
     text-align: left;
     background: #eee;
     border: 1p solid #DED9D9;
     border-radius: 3px;
-    
+
     transform: translateX(600px);
     transition: transform 0.4s ease;
 }
@@ -147,9 +164,7 @@
     transform: translate(0);
 }
 
-.event_window h2, #event_view h3 {
-    text-align: center;
-}
+
 
 .event_form {
     min-height: 100%;
@@ -159,6 +174,11 @@
     display: none;
     height: 100%;
 }
+
+.event_window h2, #event_view h3, #event_view p {
+    text-align: center;
+}
+
 
 #event_form_cont {
     display: none;
@@ -187,7 +207,7 @@
     -moz-appearance: none;
     -webkit-appearance: none;
     appearance: none;
-    
+
     border: 1px solid #cecece;
     font-size: 16px;
     background: transparent;
@@ -238,23 +258,23 @@
 .usr_list {
     /* overwrite bootstrap styles */
     margin-bottom: 0;
-    padding: 0; 
-    
+    padding: 0;
+
     position: absolute;
     margin-top: 1px;
     width: 180px;
     right: 0;
-    
+
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    
+
     background: #888;
     color: #fff;
     list-style: none;
     border-radius: 0.25em;
-    
+
     /* Animate */
     opacity: 0;
 /*    pointer-events: none;*/
@@ -295,9 +315,10 @@
 }
 
 .time_group {
-    max-width: 220px;
+    max-width: 200px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .form-group{
@@ -324,7 +345,7 @@
 
 
 @media only screen and (max-width: 768px) {
-    #confirm_del_alert { 
+    #confirm_del_alert {
         width: 100%;
     }
 }
@@ -339,4 +360,3 @@
     transform: translateX(-50%);
     text-align: center;
 }
-

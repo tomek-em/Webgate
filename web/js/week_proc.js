@@ -1,6 +1,6 @@
-/* 
+/*
 * what next?
-* use data atributes data like event body: (data-body) 
+* use data atributes data like event body: (data-body)
 * oop
 * return ok for methods checked
 * alert div created in js
@@ -8,7 +8,7 @@
 */
 (function(){
 
-//let events = {};    
+//let events = {};
 let weekDates = {};
 
 function setNewDates(dates) {
@@ -20,7 +20,7 @@ function setNewDates(dates) {
     weekDates['sat'] = dates[5];
     weekDates['sun'] = dates[6];
 }
-    
+
 
 function showFormAlert(type, text) {
     let form_cont = document.getElementById('event_form_cont');
@@ -31,7 +31,7 @@ function showFormAlert(type, text) {
     form_cont.insertBefore(alert, form_cont.firstChild);
     setTimeout(() => document.querySelector('.alert').remove(), 3000);
 }
-    
+
 function showAlert(type, text) {
     let container = document.getElementById('calendar_wrapper');
     let alert = document.createElement('div');
@@ -40,7 +40,7 @@ function showAlert(type, text) {
     alert.appendChild(document.createTextNode(text));
     container.insertBefore(alert, container.firstChild);
     setTimeout(() => document.querySelector('.alert').remove(), 3000);
-}    
+}
 
 
 
@@ -54,8 +54,8 @@ function getSingleEvent(id, type) {
     let xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    
-    xhr.onload = function() {  
+
+    xhr.onload = function() {
         if(xhr.status == 200) {
             let data = JSON.parse(xhr.responseText);
             setEventData(data);
@@ -76,11 +76,12 @@ function getWeekEvents(id, dates) {
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
-    xhr.onload = function() {  
+    xhr.onload = function() {
         if(xhr.status == 200) {
             let events = {};
             let data = JSON.parse(xhr.responseText);
             for(let i in data) {
+              if(data[i].type != 'Wait') {
                 events[i] = ({
                     id: data[i].id,
                     date: getShortDate(data[i].date)[0],
@@ -91,6 +92,7 @@ function getWeekEvents(id, dates) {
                     done: data[i].done
                 });
                 showEvent(events[i]);
+              }
             }
         } else {
             console.log('Error');
@@ -99,16 +101,16 @@ function getWeekEvents(id, dates) {
     xhr.send(`first=${dates[0]}&last=${dates[6]}`);
 }
 
-  
 
-// show event on page    
+
+// show event on page
 function showEvent(event) {
     let day_name = getDayName(event['day'] - 1);
     let cur_day = document.querySelector('#'+day_name + ' .day_body');
     let event_div = document.createElement('div');
     event_div.classList.add('event');
     event_div.id = event['id'];
-    
+
     let ev_title = document.createElement('h5');
     let ev_body = document.createElement('p');
     ev_title.innerHTML = event.title;
@@ -117,10 +119,15 @@ function showEvent(event) {
     event_div.appendChild(ev_body);
     let type = event.type.toLowerCase();
     event_div.classList.add(type);
-    
-    cur_day.appendChild(event_div);
+
+    if(event.type != 'Wait') cur_day.appendChild(event_div);
+
+    // done event
+    if(event.done == 1) {
+        event_div.classList.add('done');
+    }
 }
-    
+
 function addEvent(data) {
     // check if event date is in this week
     let day = getDayName(data['day'] -1);
@@ -131,20 +138,20 @@ function addEvent(data) {
         //events.push(data);
         showEvent(data);
     }
-    
-}   
-    
+
+}
+
 function deleteEvent(id) {
     document.getElementById(id).remove();
-}  
-    
+}
+
 
 function sendData(action, data) {
     let url = `/webgate/calendar/${action}event`;
     let xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    
+
     if(action == 'add'){
         xhr.onload = function() {
             if(xhr.status == 200) {
@@ -155,11 +162,11 @@ function sendData(action, data) {
                 showAlert('success', 'Event added');
             } else {
                 console.log('error');
-            }       
+            }
         }
    console.log(data.type); xhr.send(`title=${data.title}&body=${data.body}&date=${data.date}&type=${data.type}`);
     }
-    
+
     if(action == 'update'){
         xhr.onload = function() {
             if(xhr.status == 200) {
@@ -169,11 +176,11 @@ function sendData(action, data) {
                 showAlert('success', 'Event changed');
             } else {
                 console.log('error');
-            }       
+            }
         }
         xhr.send(`title=${data.title}&body=${data.body}&date=${data.date}&type=${data.type}&id=${data.id}`);
     }
-    
+
     if(action == 'delete'){
         xhr.onload = function() {
             if(xhr.status == 200) {
@@ -182,14 +189,27 @@ function sendData(action, data) {
                 showAlert('success', 'Event deleted');
             } else {
                 console.log('error');
-            }       
+            }
         }
     xhr.send(`id=${data.id}`);
     }
-}    
-    
 
-// edit event form    
+    if(action == 'done'){
+        xhr.onload = function() {
+            if(xhr.status == 200) {
+                let res = xhr.responseText;
+                document.getElementById(data.id).classList.add('done');
+                //showAlert('success', 'Ok');
+            } else {
+                console.log('error');
+            }
+        }
+    xhr.send(`id=${data.id}`);
+    }
+}
+
+
+// edit event form
 function setEventData(data){
     //console.log(data);
     let d = getShortDate(data.date)[0].split("-").reverse().join("-");
@@ -200,8 +220,8 @@ function setEventData(data){
     document.getElementById('ev_form_body').value = data.body;
     document.getElementById('ev_type').value = data.type;
     document.getElementById('form_title').innerHTML = 'Edit Event';
-}   
-    
+}
+
 function getFormData() {
     let date = document.getElementById('ev_form_date');
     let title = document.getElementById('ev_form_title');
@@ -212,15 +232,15 @@ function getFormData() {
     data['title'] = title.value;
     data['body'] = body.value;
     data['type'] = type.value;
-    
+
     console.log(data['title']);
     return data;
-}  
-    
+}
+
 function clearEventForm(){
     let title = document.getElementById('ev_form_title').value='';
     let body = document.getElementById('ev_form_body').value='';
-}    
+}
 
 
 function setEventListeners() {
@@ -231,15 +251,16 @@ function setEventListeners() {
     const form_title = document.getElementById('ev_form_title');
     const cancel_form = document.getElementById('cancel_form_btn');
     const event_view = document.getElementById('event_view');
+    const done_btn = document.getElementById('done_btn');
     const edit_btn = document.getElementById('edit_btn');
     const delete_btn = document.getElementById('delete_btn');
     const hide_view_btn = document.getElementById('cancel_view_btn');
-    
+
     // Event listener: click on event or day body
     document.querySelector('.week_cal').addEventListener('click', (e) => {
         if(e.target.classList.contains('day_body')) {
-            
-            if(SESSION_USR == '') { 
+
+            if(SESSION_USR == '') {
                 showAlert('danger', 'You have to log in to add new event!');
             } else {
                 let day_name = e.target.parentElement.id;
@@ -258,24 +279,31 @@ function setEventListeners() {
                 var rect = e.target.getBoundingClientRect();
                 let y_pos = Math.round( e.clientY - rect.top );
             }
-        } 
+        }
         // click on event
         else if (e.target.classList.contains('event') || e.target.parentElement.classList.contains('event')) {
-            if (e.target.classList.contains('event')) id = e.target.id;
+            if (e.target.classList.contains('event') ) id = e.target.id;
                 else id = e.target.parentElement.id;
             form_container.classList.remove('d-block');
+
+            // check if event is not done
+            if (e.target.classList.contains('done') || e.target.parentElement.classList.contains('done')) {
+                // has class done
+            } else {
+                // has not class done
+            }
             getSingleEvent(id, 'form');
         }
     });
-    
+
     // event: form submit
     event_form.addEventListener('submit', (e) => {
         e.preventDefault();
         let data = getFormData();
-        let day_no = new Date(data['date']).getDay();   
+        let day_no = new Date(data['date']).getDay();
         if(day_no == 0) day_no = 7;
         data['day'] = day_no;
-        
+
         let atr = form_container.getAttribute('data-action');
         const t = document.getElementById('ev_form_title').value;
         if (t == '' ) {
@@ -288,14 +316,14 @@ function setEventListeners() {
             document.querySelector('.event_window').classList.remove('slide');
             if (atr == 'add') {
                 sendData('add', data);
-            } 
+            }
             else {
                 data['id'] = id;
-                sendData('update', data);                   
-            } 
+                sendData('update', data);
+            }
         }
     });
-    
+
     // cancel buttons
     cancel_form.addEventListener('click', (e) => {
         form_container.classList.remove('d-block');
@@ -307,15 +335,23 @@ function setEventListeners() {
         event_view.classList.remove('d-block');
         document.querySelector('.event_window').classList.remove('slide');
     });
-    
+
+    // mark done button
+    done_btn.addEventListener('click', (e) => {
+        event_view.classList.remove('d-block');
+        document.querySelector('.event_window').classList.remove('slide');
+        data['id'] = id;
+        sendData('done', data);
+    })
+
     // edit button
     edit_btn.addEventListener('click', (e) => {
         event_view.classList.remove('d-block');
         form_container.classList.add('d-block');
         form_container.setAttribute('data-action', 'edt');
         getSingleEvent(id);
-        }); 
-    
+        });
+
     // delete button
     delete_btn.addEventListener('click', (e) => {
         event_view.classList.remove('d-block');
@@ -373,23 +409,30 @@ function showWeekDates(date) {
 //clean up
 function clearCalendar() {
     const days = document.querySelectorAll('.day_body');
-    for (let i = 0; i < days.length; i++){ 
+    for (let i = 0; i < days.length; i++){
         days[i].innerHTML = '';
     }
 
     const headers = document.querySelectorAll('.day_header');
-    for (let i = 0; i < headers.length; i++){ 
+    for (let i = 0; i < headers.length; i++){
         headers[i].classList.remove('today');
     }
-    
+
     events = [];
 }
+
+
 
 
 // Create week calendar
 function createWeekCalendar(customDate, weekIndex) {
     let dates = [];
     let date = new Date();
+
+//    setTimeout(() => {
+//        document.getElementById('spinner').remove();
+//    }, 500);
+
     if (customDate != 0) {
         date = new Date(customDate);
     }
@@ -397,7 +440,7 @@ function createWeekCalendar(customDate, weekIndex) {
     let day = date.getDay();
     if (day == 0) day = 7;
     let monday =  date.setDate(date.getDate() - day + 1);
-    
+
     //set date for each day in current week
     for (let i = 0; i <= 6; i++) {
         dates[i] = getCurrentDate(monday, i);
@@ -417,7 +460,7 @@ function weekCalendarInit(date) {
     let weekIndex = 0;
     const prevBtn = document.getElementById('prev');
     const nextBtn = document.getElementById('next');
-    
+
     prevBtn.addEventListener('click', (e) => {
         clearCalendar();
         weekIndex -= 7;
@@ -428,7 +471,7 @@ function weekCalendarInit(date) {
         weekIndex += 7;
         createWeekCalendar(date, weekIndex);
     });
-    
+
     setEventListeners();
 }
 document.addEventListener('DOMContentLoaded', weekCalendarInit(current_date), false);
