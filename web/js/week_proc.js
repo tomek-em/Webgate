@@ -69,7 +69,7 @@ function getSingleEvent(id, type) {
 }
 
 // fetch events function
-function getWeekEvents(id, dates) {
+function getWeekEvents1(id, dates) {
     const url = '/webgate/calendar/getevents';
 
     let xhr = new XMLHttpRequest();
@@ -99,6 +99,41 @@ function getWeekEvents(id, dates) {
         }
     }
     xhr.send(`first=${dates[0]}&last=${dates[6]}`);
+}
+
+
+function getWeekEvents(id, dates) {
+  const url = '/webgate/calendar/getevents';
+
+  fetch(url, {
+    method: 'post',
+    headers: {
+      "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+    },
+    body: `first=${dates[0]}&last=${dates[6]}`
+  })
+  .then(res => res.json())
+  .then(json => prepearEvents(json))
+}
+
+function prepearEvents(data) {
+  console.log(data);
+  let events = {};
+
+  for(let i in data) {
+    if(data[i].type != 'Wait') {
+      events[i] = ({
+          id: data[i].id,
+          date: getShortDate(data[i].date)[0],
+          day: getShortDate(data[i].date)[1],
+          title: data[i].title,
+          body: data[i].body,
+          type: data[i].type,
+          done: data[i].done
+      });
+      showEvent(events[i]);
+    }
+  }
 }
 
 
@@ -452,8 +487,8 @@ function createWeekCalendar(customDate, weekIndex) {
 
 
 // init function
-function weekCalendarInit(date) {
-    createWeekCalendar(date, 0);
+function weekCalendarInit() {
+    createWeekCalendar(current_date, 0);
     //showAlert('success', 'Click on calendar to add new event');
 
     // event listeners: previous/ next button
@@ -474,5 +509,5 @@ function weekCalendarInit(date) {
 
     setEventListeners();
 }
-document.addEventListener('DOMContentLoaded', weekCalendarInit(current_date), false);
+document.addEventListener('DOMContentLoaded', weekCalendarInit, false);
 }());

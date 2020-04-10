@@ -5,6 +5,22 @@
 (function() {
 let bookmarks = [];
 
+const loc_inf = {
+  gda: ['judy-vos-WiO6iMq-nfs-unsplash', 'Natalia Mejer', 'Image by Gruu from Pixabay', '' ],
+  pol: ['Dolina Pięciu Stawów Polskich- widok ze Świstówki  - Szymon Soja', '', '', ''],
+  nyc: ['','','',''],
+  ama:['','','','']
+}
+
+const europe = {
+  loc: ['gda', 'pol'],
+ };
+
+const world = {
+  loc: [ 'nyc', 'ama'],
+  timezone: [-6, -5],
+};
+
 function showAlert(type, text) {
     const cont = document.querySelector('header');
     const before = document.querySelector('nav');
@@ -18,7 +34,7 @@ function showAlert(type, text) {
 
 function showBookmarkCont() {
     document.getElementById('bookmark_input').value = '';
-    let list = document.querySelectorAll('#bookmark_cont ul li');
+    const list = document.querySelectorAll('#bookmark_cont ul li');
     list.forEach((li) => {
        li.style.display = '';
     });
@@ -26,81 +42,94 @@ function showBookmarkCont() {
     document.querySelector('#bookmark_cont').classList.toggle('d-block');
 }
 
+
+/* Set picture*/
+
 function getRandom(num) {
   return Math.floor(Math.random()*num);
 }
 
-function getTime() {
-  let date = new Date();
-  let time = {
-    day: date.getDay()-1,
-    hour: date.getHours()
+function getDayTime(time, loc) {
+  if(time < 5 || time >= 20) {
+    return 0;
+  } else if ((time >= 5 && time < 7) || (time >= 17 && time < 20)) {
+    return 1;
+  } else {
+    return 2;
+  }
+  // extra picture
+  if ((loc == 'ama' && time >= 15 && time < 17) || (loc == 'pol' && 1 == 2)) {
+    return 3;
   }
 }
 
-function showPictureInfo() {
-  let date = new Date();
-  let day = date.getDay()-1;
-  let time = date.getHours();
-  //day = 4;
-  let loc_num;
-
-  let europe = {
-    loc: ['gda', 'pol'],
-    cur_loc: '',
-    day_time: ''
-   };
-
-  let world = {
-    loc: [ 'nyc', 'ama'],
-    time_zone: [6, 4],
-    cur_loc: '',
-    day_time: ''
-  };
-
+function showPicture(loc, daytime) {
   const picture = document.getElementById('hero_img');
   const place = document.getElementById('pic_name');
-  const credit = document.querySelector('picture_details a');
+  const credit = document.querySelector('.picture_details a');
 
-  europe.cur_loc = europe.loc[getRandom(2)];
-  world.cur_loc = world.loc[getRandom(2)];
-
-  loc_num = Math.floor(day/4);
-  europe.cur_loc = europe.loc[loc_num];
-  world.cur_loc = world.loc[loc_num];
-
-  if(time < 5 || time >= 19) {
-    europe.day_time = 'n';
-  } else if ((time >= 5 && time < 7) || (time >= 17 && time < 19)) {
-    europe.day_time = 'g';
-  } else {
-    europe.day_time = 'd';
-  }
-
-  console.log({ loc_num, europe, world });
-  //picture.style.backgroundImage = "url(web/img/pic2-min.jpg)";
-
+  let url = `url(web/img/bg/${loc}/${loc}-${daytime}.jpg)`;
+  let url2 = "url(web/img/bg/ama/ama-d.jpg)";
+  picture.style.backgroundImage = `linear-gradient(to bottom, rgba(0,0,0, 0) 0%,rgba(0,0,0,0.4) 1%,rgba(0,0,0,0.1) 100%), ${url}`;
+  console.log();
+  credit.innerHTML = loc_inf[loc][daytime];
 }
 
+function selectPicture(loc_switch) {
+  let date = new Date();
+  let day = date.getDay()+1;
+  let time = date.getHours();
+  //day = day-2;
+  let loc_num;
+  let cur_location;
+  let location_time;
+  let daytime;
+
+  loc_num = Math.floor((day+2)%2);
+  console.log(day);
+
+  if(loc_switch) {
+    cur_location = europe.loc[loc_num];
+    location_time = time;
+  } else {
+    cur_location = world.loc[loc_num];
+    location_time = time + world.timezone[loc_num];
+      if(location_time < 0) {
+        location_time = 24 + location_time;
+      } else if (location_time > 23) {
+        location_time = location_time - 24;
+      }
+  }
+
+  daytime = getDayTime(location_time, cur_location);
+  showPicture(cur_location, daytime);
+}
+
+function setPicture() {
+  let loc_switch = true;
+  selectPicture(loc_switch);
+  setInterval( () => {
+    loc_switch = !loc_switch;
+    selectPicture(loc_switch);
+  }, 120000);
+}
+
+
+/* Set clock functions */
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function showTime() {
-    let timer = document.querySelector('#timer');
+function getTime() {
+    const timer = document.querySelector('#timer');
     let time = new Date();
     let h = String(time.getHours()).padStart(2, '0');
     let min = String(time.getMinutes()).padStart(2, '0');
-    let sec = String(time.getSeconds()).padStart(2, '0');
 
     timer.innerHTML = `${h}:${min}`;
-    //await sleep(60000);
-    //showTime();
 }
 
-
 /* BOKMARKS */
-
 function filterBookmarks() {
     let cont = document.querySelector('#bookmark_cont');
     cont.classList.add('d-block');
@@ -125,8 +154,8 @@ function filterBookmarks() {
 
 
 function createBookmarkList(logged) {
-    let cont = document.querySelector('#bookmark_cont');
-    let list = document.querySelector('#bookmark_cont ul');
+    const cont = document.querySelector('#bookmark_cont');
+    const list = document.querySelector('#bookmark_cont ul');
 
     if(logged == false) {
         bookmarks[0] = {
@@ -160,17 +189,14 @@ function createBookmarkList(logged) {
         li.appendChild(rmv);
         list.appendChild(li);
     });
-
 }
 
 
 function addBookmark(title, web, group) {
-    let url = `/webgate/bookmarks/addbookmark`;
-    let xhr = new XMLHttpRequest();
-
+    const url = `/webgate/bookmarks/addbookmark`;
+    const xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
     xhr.onload = function() {
         if(xhr.status == 200) {
         let res = xhr.responseText;
@@ -186,11 +212,10 @@ function addBookmark(title, web, group) {
 }
 
 function deleteBookmark(id) {
-    let url = `/webgate/bookmarks/deletebookmark`;
-    let xhr = new XMLHttpRequest();
+    const url = `/webgate/bookmarks/deletebookmark`;
+    const xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
     xhr.onload = function() {
         if(xhr.status == 200) {
             let res = xhr.responseText;
@@ -214,9 +239,8 @@ function clearBookmarkList() {
 
 // get bookmarks
 function getBookmarks() {
-    let url = `/webgate/bookmarks/getbookmarks`;
-    let xhr = new XMLHttpRequest();
-
+    const url = `/webgate/bookmarks/getbookmarks`;
+    const xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
@@ -293,17 +317,17 @@ function getLocation() {
 // EVENT LISTENERS --
 
 function addEventListeners() {
-    let form_cont = document.querySelector('#bookmark_form_cont');
-    let main_area = document.querySelector('.hero_image');
-    let search_input = document.querySelector('#bookmark_input');
-    let main_cont = document.getElementById('main_cont');
+    const form_cont = document.querySelector('#bookmark_form_cont');
+    const main_area = document.querySelector('.hero_image');
+    const search_input = document.querySelector('#bookmark_input');
+    const main_cont = document.getElementById('main_cont');
 
-    let dot_one = document.getElementById('dot_one');
-    let dot_two = document.getElementById('dot_two');
-    let main_wid = document.getElementById('main_box');
-    let month_wid = document.getElementById('cal_box');
-    let calendar = document.getElementById('calendar');
-    let event_text = document.getElementById('event_text');
+    const dot_one = document.getElementById('dot_one');
+    const dot_two = document.getElementById('dot_two');
+    const main_wid = document.getElementById('main_box');
+    const month_wid = document.getElementById('cal_box');
+    const calendar = document.getElementById('calendar');
+    const event_text = document.getElementById('event_text');
 
     // event - show add bookmark form
     document.querySelector('#new_bookmark_btn').addEventListener('click', (e) => {
@@ -318,9 +342,9 @@ function addEventListeners() {
     document.querySelector('#bookmark_form').addEventListener('submit', (e) => {
         e.preventDefault();
         form_cont.classList.remove('d-block');
-        let title = document.querySelector('#bookmark_form_title').value;
-        let web = document.querySelector('#bookmark_form_web').value;
-        let group = document.querySelector('#bookmark_form_group').value;
+        const title = document.querySelector('#bookmark_form_title').value;
+        const web = document.querySelector('#bookmark_form_web').value;
+        const group = document.querySelector('#bookmark_form_group').value;
 
         if (title != '') {
             addBookmark( title, web, group );
@@ -379,10 +403,13 @@ function addEventListeners() {
 
 // ----
 function setMainPage() {
+    setTimeout(() => {
+      document.getElementById('waiting_layer').remove();
+    }, 200);
     getLocation();
-    showTime();
-    showPictureInfo();
-    setInterval (showTime, 60000);
+    getTime();
+    setInterval (getTime, 60000);
+    setPicture();
     addEventListeners();
     if (SESSION_USR) {
         getBookmarks();

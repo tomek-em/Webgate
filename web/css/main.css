@@ -99,6 +99,10 @@ footer p {
 
 /* NAVBAR */
 
+nav {
+  background-color: rgba(20, 20, 20, 0.8);
+}
+
 .bg_dark, .nav_dark nav {
     background-color: #444;
 }
@@ -246,11 +250,9 @@ nav.bg-dark {
 
 
 
-
-
 /* MAIN PAGE / Bookmarks  */
 .hero_image {
-    background-image:  linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3)), url('../img/mike-kotsch-xAgvgQpYsf4-unsplash.jpg');
+    background-image:  linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 1)), url('../img/mike-kotsch-xAgvgQpYsf4-unsplash.jpg');
     height: 100%;
 
     background-position: center;
@@ -318,7 +320,7 @@ nav.bg-dark {
   /* border-bottom: 1px solid #ddd; */
   padding: 0 48px;
   text-align: center;
-
+  text-shadow: 1px 1px 6px #444;
 }
 
 .content_box h2 {
@@ -437,7 +439,7 @@ nav.bg-dark {
 }
 
 .input_box .search {
-  border-radius: 2px;
+  border-radius: 22px;
   border: none;
   -webkit-box-shadow: 0px 1px 6px 0px rgba(64,64,64,1);
   -moz-box-shadow: 0px 1px 6px 0px rgba(64,64,64,1);
@@ -542,7 +544,7 @@ nav.bg-dark {
 
 @media only screen and (max-width: 768px) {
     .geo {
-      top: 40px;
+      top: 50px;
     }
 
     .location {
@@ -730,4 +732,24 @@ nav.bg-dark {
   .copyright {
     right: 16px;
   }
+}
+
+.waiting_layer {
+  background: #444;
+  opacity: 0.97;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.waiting_layer img {
+
 }

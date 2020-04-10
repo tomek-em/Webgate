@@ -48,6 +48,7 @@
           <div class="location"><a id="weather_credit" href="https://darksky.net/poweredby/"></a></div>
         </div>
 
+      <div class="waiting_layer" id="waiting_layer"> <img src="<?php echo URL_ROOT.'web/img/spinner.gif'?>"> </div>
       <div class="main_container" id="main_cont">
         <div class="box_wrapper">
           <!-- Main box -->

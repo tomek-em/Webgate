@@ -146,12 +146,7 @@ class Calendar extends Core {
 
 
     public function test() {
-        $i = 0;
-        for ($k = '6.0'; $k <= '11.25'; $k += 0.25) {
-            $start[$i] = sprintf('%05.2f', $k);
-            $i++;
-        }
-        echo print_r($start);
+        echo ('test');
 
     }
 
