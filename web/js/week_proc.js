@@ -488,7 +488,8 @@ function createWeekCalendar(customDate, weekIndex) {
 
 // init function
 function weekCalendarInit() {
-    createWeekCalendar(current_date, 0);
+  const cur_date = current_date;
+    createWeekCalendar(cur_date, 0);
     //showAlert('success', 'Click on calendar to add new event');
 
     // event listeners: previous/ next button
@@ -499,12 +500,12 @@ function weekCalendarInit() {
     prevBtn.addEventListener('click', (e) => {
         clearCalendar();
         weekIndex -= 7;
-        createWeekCalendar(date, weekIndex);
+        createWeekCalendar(cur_date, weekIndex);
     });
     nextBtn.addEventListener('click', (e) => {
         clearCalendar();
         weekIndex += 7;
-        createWeekCalendar(date, weekIndex);
+        createWeekCalendar(cur_date, weekIndex);
     });
 
     setEventListeners();
