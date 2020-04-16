@@ -108,7 +108,7 @@
                 </div>
             </div>
 
-        </div> <!-- End of Container -- -->
+        </div> <!-- End of Container  -->
 
         <!-- Spinner on loading -->
         <img id="spinner" class="spinner" src="<?php echo URL_ROOT.'web/img/spinner.gif'; ?>">
@@ -118,7 +118,7 @@
 
         <!--  Event forms -->
 
-        <!-- Event Window ------ -->
+        <!-- Event Window  -->
         <div class="event_window">
             <div class="container mt-4" id="event_view">
                 <h3 id="ev_title">Event title</h3>
@@ -194,10 +194,12 @@
     </footer>
 
     <script>
+    
         let current_date = <?php echo json_encode($data['date']); ?>;
+        console.log(<?php echo json_encode ($data['date']); ?> );
         let SESSION_USR = '<?php echo $_SESSION['user_name']; ?>';
     </script>
-    <script src="<?php echo URL_ROOT ?>web/js/week_proc.js"></script>
     <script src="<?php echo URL_ROOT ?>web/js/main.js"></script>
+    <script src="<?php echo URL_ROOT ?>web/js/week_proc.js"></script>
 </body>
 </html>

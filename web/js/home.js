@@ -5,20 +5,23 @@
 (function() {
 let bookmarks = [];
 
-const loc_inf = {
-  gda: ['judy-vos-WiO6iMq-nfs-unsplash', 'Natalia Mejer', 'Image by Gruu from Pixabay', '' ],
-  pol: ['Dolina Pięciu Stawów Polskich- widok ze Świstówki  - Szymon Soja', '', '', ''],
-  nyc: ['','','',''],
-  ama:['','','','']
+const pic_inf = {
+  gda: ['Image by Gruu from Pixabay', 'Natalia Mejer', 'judy-vos-WiO6iMq-nfs-unsplash', '', 'Gdańsk' ],
+  pol: ['', 'Janusz Maniak on Unsplash', 'Sacre Bleu on Unsplash', '', 'Poland'],
+  nyc: ['','','Todd Quackenbush on Unsplash','', 'New York City'],
+  ama:['','vishnu-prasad-VGWnXfbf-G4-unsplash.jpg','','', 'Amazon rain forest'],
+  por:['Pier Francesco Grizi on Unsplash', 'Andreas Brücker on Unsplash', 'Mélanie Martin on Unsplash', '', 'Portugal'],
+  rio:['Gabriel Santos on Unsplash', 'Davi Costa on Unsplash', 'Raphael Nogueira on Unsplash', '', 'Rio de Janeiro']
 }
 
+
 const europe = {
-  loc: ['gda', 'pol'],
+  loc: ['gda', 'pol', 'por'],
  };
 
 const world = {
-  loc: [ 'nyc', 'ama'],
-  timezone: [-6, -5],
+  loc: [ 'nyc', 'ama', 'rio'],
+  timezone: [-6, -5, -3],
 };
 
 function showAlert(type, text) {
@@ -63,6 +66,7 @@ function getDayTime(time, loc) {
   }
 }
 
+
 function showPicture(loc, daytime) {
   const picture = document.getElementById('hero_img');
   const place = document.getElementById('pic_name');
@@ -70,23 +74,29 @@ function showPicture(loc, daytime) {
 
   let url = `url(web/img/bg/${loc}/${loc}-${daytime}.jpg)`;
   let url2 = "url(web/img/bg/ama/ama-d.jpg)";
-  picture.style.backgroundImage = `linear-gradient(to bottom, rgba(0,0,0, 0) 0%,rgba(0,0,0,0.4) 1%,rgba(0,0,0,0.1) 100%), ${url}`;
-  console.log();
-  credit.innerHTML = loc_inf[loc][daytime];
+  document.getElementById('hero_img').style.backgroundImage = `linear-gradient(to bottom, rgba(0,0,0, 0) 0%,rgba(0,0,0,0.9) 1%,rgba(0,0,0,0.9) 100%), ${url}`;
+  document.getElementById('hero_img').style.backgroundImage = `linear-gradient(to bottom, rgba(0,0,0, 0) 0%,rgba(0,0,0,0.4) 1%,rgba(0,0,0,0.1) 100%), ${url}`;
+  // setTimeout(function() {
+  //   document.getElementById('hero_img').style.backgroundImage = `linear-gradient(to bottom, rgba(0,0,0, 0) 0%,rgba(0,0,0,0.4) 1%,rgba(0,0,0,0.1) 100%), ${url}`;
+  // }, 800);
+  place.innerHTML = pic_inf[loc][4];
+  credit.innerHTML = `photo by: ${pic_inf[loc][daytime]}`;
 }
 
 function selectPicture(loc_switch) {
   let date = new Date();
-  let day = date.getDay()+1;
+  let day = date.getDay();
+  //day = 0;
+  if(day == 1) day = 2;
+  if(day == 0) day = 1;
   let time = date.getHours();
-  //day = day-2;
   let loc_num;
   let cur_location;
   let location_time;
   let daytime;
 
-  loc_num = Math.floor((day+2)%2);
-  console.log(day);
+  loc_num = Math.floor((day)%3);
+  console.log(day, loc_num);
 
   if(loc_switch) {
     cur_location = europe.loc[loc_num];
@@ -405,7 +415,7 @@ function addEventListeners() {
 function setMainPage() {
     setTimeout(() => {
       document.getElementById('waiting_layer').remove();
-    }, 200);
+    }, 250);
     getLocation();
     getTime();
     setInterval (getTime, 60000);

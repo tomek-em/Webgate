@@ -56,7 +56,7 @@
             <h1 id="timer"></h1>
             <h2>
                 <?php if(!isset($_SESSION[user_id])): ?>
-                    Welcome to WebGate
+                    WebGate
                 <?php else : ?>
                    Hi <?php echo $_SESSION['user_name']; ?>
                 <?php endif; ?>
@@ -100,7 +100,7 @@
 
 
       <!-- Picture name and credit -->
-      <div class="picture_details"><div id="pic_name">Winter</div><a href="#">Unsplash</a><div id="hide_wid"><a href="#"><i class="fa fa-eye"></i></a></div></div>
+      <div class="picture_details"><div id="pic_name"></div><a>Unsplash</a><div id="hide_wid"><a href="#"><i class="fa fa-eye"></i></a></div></div>
 
       <!-- Copyright -->
       <div class="copyright"><span>Created by: <a href="https://tomaszmejer.com">Tomasz Mejer</a></div>

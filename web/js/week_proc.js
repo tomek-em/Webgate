@@ -102,38 +102,40 @@ function getWeekEvents1(id, dates) {
 }
 
 
-function getWeekEvents(id, dates) {
+function getApi(id, dates) {
   const url = '/webgate/calendar/getevents';
-
-  fetch(url, {
+  return fetch(url, {
     method: 'post',
     headers: {
       "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
     },
     body: `first=${dates[0]}&last=${dates[6]}`
   })
-  .then(res => res.json())
-  .then(json => prepearEvents(json))
+  //.then(response => response.json())
+
+  //.then(json => console.log(json));
+    //return console.log('ret');
+
+  //.then(res => res.json())
+  //.then(json => prepearEvents(json))
 }
 
-function prepearEvents(data) {
-  console.log(data);
+function getWeekEvents(id, dates) {
   let events = {};
 
-  for(let i in data) {
-    if(data[i].type != 'Wait') {
-      events[i] = ({
-          id: data[i].id,
-          date: getShortDate(data[i].date)[0],
-          day: getShortDate(data[i].date)[1],
-          title: data[i].title,
-          body: data[i].body,
-          type: data[i].type,
-          done: data[i].done
-      });
-      showEvent(events[i]);
-    }
-  }
+  getApi(id, dates)
+  .then((res) => res.json())
+  .then((json) => {
+    json.forEach((ev, i) =>  {
+      if(ev.type != 'Wait') {
+        events[i] = ev;
+        events[i].day = getShortDate(ev.date)[1];
+        events[i].date = getShortDate(ev.date)[0];
+        //console.log(events[i])
+        showEvent(events[i]);
+      }
+    });
+  });
 }
 
 

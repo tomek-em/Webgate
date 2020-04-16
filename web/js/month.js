@@ -82,15 +82,13 @@ function redirectToWeek(date) {
     } else {
       f.action ='calendar/month';
     }
-
     f.method = 'POST';
 
-    let i=document.createElement('input');
+    let i = document.createElement('input');
     i.type = 'hidden';
     i.name = 'date';
     i.value = date;
     f.appendChild(i);
-    //console.log(date);
     document.body.appendChild(f);
     f.submit();
 }

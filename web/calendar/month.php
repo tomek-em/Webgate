@@ -55,7 +55,7 @@
         let month_page = true;
         // date from month claendar
     </script>
-    <script src="<?php echo URL_ROOT ?>web/js/month.js"></script>
     <script src="<?php echo URL_ROOT ?>web/js/main.js"></script>
+    <script src="<?php echo URL_ROOT ?>web/js/month.js"></script>
 </body>
 </html>
