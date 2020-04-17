@@ -143,6 +143,7 @@
     </script>
 
     <script src="<?php echo URL_ROOT ?>web/js/main.js"></script>
+    <script src="<?php echo URL_ROOT ?>web/js/api.js"></script>
     <script src="<?php echo URL_ROOT ?>web/js/home.js"></script>
     <script src="<?php echo URL_ROOT ?>web/js/month.js"></script>
 </body>

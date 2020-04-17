@@ -192,14 +192,14 @@
             <p class="">Sticky Footer</p>
         </div>
     </footer>
-
     <script>
-    
-        let current_date = <?php echo json_encode($data['date']); ?>;
-        console.log(<?php echo json_encode ($data['date']); ?> );
+        let temp_date = <?php echo json_encode($data['date']); ?>;
+        let current_date;
+        temp_date ? current_date = temp_date : current_date = 0;
         let SESSION_USR = '<?php echo $_SESSION['user_name']; ?>';
     </script>
     <script src="<?php echo URL_ROOT ?>web/js/main.js"></script>
+    <script src="<?php echo URL_ROOT ?>web/js/api.js"></script>
     <script src="<?php echo URL_ROOT ?>web/js/week_proc.js"></script>
 </body>
 </html>

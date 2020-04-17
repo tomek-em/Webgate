@@ -139,7 +139,10 @@ function getTime() {
     timer.innerHTML = `${h}:${min}`;
 }
 
+
+
 /* BOKMARKS */
+
 function filterBookmarks() {
     let cont = document.querySelector('#bookmark_cont');
     cont.classList.add('d-block');
@@ -186,8 +189,15 @@ function createBookmarkList(logged) {
 
         li.id = bmr.id;
         li.classList.add('list-group-item');
+        li.addEventListener('click', (e) => {
+          if(e.target.classList.contains('rmv')) {
 
-        a.href = bmr.web;
+          } else {
+            window.open(bmr.web, '_blank');
+          }
+        });
+
+        //a.href = bmr.web;
         a.setAttribute('target', '_blank');
         a.classList.add('bm_link');
         a.innerHTML = bmr.title;
@@ -198,48 +208,36 @@ function createBookmarkList(logged) {
         li.appendChild(a);
         li.appendChild(rmv);
         list.appendChild(li);
+
+    });
+}
+
+function addBookmark(title, web, group) {
+  let url = '/webgate/bookmarks/addbookmark';
+
+  getApi(url, `title=${title}&web=${web}&group=${group}`)
+  .then((res) => {
+      showAlert('success', 'Bookmark added');
+      getBookmarks();
+    })
+    .catch(function() {
+        console.log("error");
     });
 }
 
 
-function addBookmark(title, web, group) {
-    const url = `/webgate/bookmarks/addbookmark`;
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.onload = function() {
-        if(xhr.status == 200) {
-        let res = xhr.responseText;
-        console.log(res);
-        // alert
-        showAlert('success', 'Bookmark added');
-        getBookmarks();
-        } else {
-            console.log('error');
-        }
-    }
-    xhr.send(`title=${title}&web=${web}&group=${group}`);
-}
-
 function deleteBookmark(id) {
-    const url = `/webgate/bookmarks/deletebookmark`;
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.onload = function() {
-        if(xhr.status == 200) {
-            let res = xhr.responseText;
-            console.log(res);
+  let url = '/webgate/bookmarks/deletebookmark';
 
-            document.getElementById(id).remove();
-            showAlert('success', 'Bookmark deleted');
-        } else {
-            console.log('error');
-        }
-    }
-    xhr.send(`id=${id}`);
+  getApi(url, `id=${id}`)
+  .then((res) => {
+      document.getElementById(id).remove();
+      showAlert('success', 'Bookmark deleted');
+    })
+    .catch(function() {
+        console.log("error");
+    });
 }
-
 
 
 function clearBookmarkList() {
@@ -249,24 +247,21 @@ function clearBookmarkList() {
 
 // get bookmarks
 function getBookmarks() {
-    const url = `/webgate/bookmarks/getbookmarks`;
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  let url = '/webgate/bookmarks/getbookmarks';
 
-    xhr.onload = function() {
-        if(xhr.status == 200) {
-        let res = JSON.parse(xhr.responseText);
-        clearBookmarkList();
-        bookmarks = res;
-        createBookmarkList(true);
-        } else {
-            console.log('error');
-        }
-    }
-    xhr.send();
+  getApi(url, ``)
+  .then((res) => res.json())
+  .then((json) => {
+    json.forEach((ev, i) =>  {
+      clearBookmarkList();
+      bookmarks = json;
+      createBookmarkList(true);
+    });
+  })
+  .catch(function() {
+      console.log("error");
+  });
 }
-
 
 
 
@@ -300,26 +295,26 @@ function getWeather(lat, lon) {
     .catch(err => console.log(err));
 }
 
+function getLocation(id, dates) {
+  let events = {};
+  let endpoint = 'https://ipapi.co/json';
 
-function getLocation() {
-    let endpoint = 'https://ipapi.co/json/';
+  fetch(endpoint, {
+    method: 'get'
+  })
+    .then((res) => res.json())
+    .then((response) => {
+      let lat = response.latitude;
+      let lon = response.longitude;
+      let city = response.city;
+      let timezone = response.timezone;
 
-    let xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            let response = JSON.parse(this.responseText);
-
-            let lat = response.latitude;
-            let lon = response.longitude;
-            let city = response.city;
-            let timezone = response.timezone;
-
-            showLocation(city);
-            getWeather(lat, lon);
-        }
-    };
-    xhr.open('GET', endpoint, true);
-    xhr.send();
+      showLocation(city);
+      getWeather(lat, lon);
+    })
+    .catch(function() {
+        console.log("error");
+    });
 }
 
 

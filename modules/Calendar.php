@@ -43,7 +43,7 @@ class Calendar extends Core {
             $data['type'] = trim($_POST['type']);
             $event_id = $this->events->addSingleEvent($data);
             if ($event_id) {
-                echo $event_id;
+                echo json_encode($event_id);
             }
         }
     }
@@ -107,22 +107,15 @@ class Calendar extends Core {
 
 
 
-
     // SHOW WEEK CALENDAR METHODES--------------------------------------
     public function month() {
-        if(($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_SESSION['user_id'])))  {
-            // if there is date set from month calendar do sth...
-        }
         $this->render('calendar/month', $data);
     }
 
-    public function week($data) {
-        if($_SERVER['REQUEST_METHOD'] == 'POST')  {
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-            $data['date'] = trim($_POST['date']);
-        } else {
-            $data['date'] = 0;
-        }
+    public function week($d) {
+        $data = [
+          'date' => $d
+        ];
         $this->render('calendar/week', $data);
     }
 

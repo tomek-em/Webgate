@@ -47,83 +47,30 @@ function showAlert(type, text) {
 // EVENTS --------
 // show day event
 
-//fetch single event
+//get single event
 function getSingleEvent(id, type) {
-    const url = '/webgate/calendar/getsingleevent';
+  const url = '/webgate/calendar/getsingleevent';
 
-    let xhr = new XMLHttpRequest();
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-    xhr.onload = function() {
-        if(xhr.status == 200) {
-            let data = JSON.parse(xhr.responseText);
-            setEventData(data);
-            if(type == 'form') {
-                document.getElementById('event_view').classList.add('d-block');
-                document.querySelector('.event_window').classList.add('slide');
-            }
-        }
+  getApi(url, `id=${id}`)
+  .then((res) => res.json())
+  .then((json) =>  {
+    setEventData(json);
+    if(type == 'form') {
+        document.getElementById('event_view').classList.add('d-block');
+        document.querySelector('.event_window').classList.add('slide');
     }
-    xhr.send(`id=${id}`);
-}
-
-// fetch events function
-function getWeekEvents1(id, dates) {
-    const url = '/webgate/calendar/getevents';
-
-    let xhr = new XMLHttpRequest();
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-    xhr.onload = function() {
-        if(xhr.status == 200) {
-            let events = {};
-            let data = JSON.parse(xhr.responseText);
-            for(let i in data) {
-              if(data[i].type != 'Wait') {
-                events[i] = ({
-                    id: data[i].id,
-                    date: getShortDate(data[i].date)[0],
-                    day: getShortDate(data[i].date)[1],
-                    title: data[i].title,
-                    body: data[i].body,
-                    type: data[i].type,
-                    done: data[i].done
-                });
-                showEvent(events[i]);
-              }
-            }
-        } else {
-            console.log('Error');
-        }
-    }
-    xhr.send(`first=${dates[0]}&last=${dates[6]}`);
-}
-
-
-function getApi(id, dates) {
-  const url = '/webgate/calendar/getevents';
-  return fetch(url, {
-    method: 'post',
-    headers: {
-      "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
-    },
-    body: `first=${dates[0]}&last=${dates[6]}`
   })
-  //.then(response => response.json())
-
-  //.then(json => console.log(json));
-    //return console.log('ret');
-
-  //.then(res => res.json())
-  //.then(json => prepearEvents(json))
+  .catch(function() {
+      console.log("error");
+  });
 }
 
+// get week events
 function getWeekEvents(id, dates) {
   let events = {};
+  let url = '/webgate/calendar/getevents';
 
-  getApi(id, dates)
+  getApi(url, `first=${dates[0]}&last=${dates[6]}`)
   .then((res) => res.json())
   .then((json) => {
     json.forEach((ev, i) =>  {
@@ -131,14 +78,11 @@ function getWeekEvents(id, dates) {
         events[i] = ev;
         events[i].day = getShortDate(ev.date)[1];
         events[i].date = getShortDate(ev.date)[0];
-        //console.log(events[i])
         showEvent(events[i]);
       }
     });
   });
 }
-
-
 
 // show event on page
 function showEvent(event) {
@@ -155,6 +99,7 @@ function showEvent(event) {
     event_div.appendChild(ev_title);
     event_div.appendChild(ev_body);
     let type = event.type.toLowerCase();
+
     event_div.classList.add(type);
 
     if(event.type != 'Wait') cur_day.appendChild(event_div);
@@ -175,7 +120,6 @@ function addEvent(data) {
         //events.push(data);
         showEvent(data);
     }
-
 }
 
 function deleteEvent(id) {
@@ -184,66 +128,48 @@ function deleteEvent(id) {
 
 
 function sendData(action, data) {
-    let url = `/webgate/calendar/${action}event`;
-    let xhr = new XMLHttpRequest();
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-    if(action == 'add'){
-        xhr.onload = function() {
-            if(xhr.status == 200) {
-                let res = xhr.responseText;
-                data['id'] = res;
-                addEvent(data);
-                // alert
-                showAlert('success', 'Event added');
-            } else {
-                console.log('error');
-            }
-        }
-   console.log(data.type); xhr.send(`title=${data.title}&body=${data.body}&date=${data.date}&type=${data.type}`);
-    }
-
-    if(action == 'update'){
-        xhr.onload = function() {
-            if(xhr.status == 200) {
-                let res = xhr.responseText;
-                deleteEvent(data['id']);
-                addEvent(data);
-                showAlert('success', 'Event changed');
-            } else {
-                console.log('error');
-            }
-        }
-        xhr.send(`title=${data.title}&body=${data.body}&date=${data.date}&type=${data.type}&id=${data.id}`);
-    }
-
-    if(action == 'delete'){
-        xhr.onload = function() {
-            if(xhr.status == 200) {
-                let res = xhr.responseText;
-                deleteEvent(data['id']);
-                showAlert('success', 'Event deleted');
-            } else {
-                console.log('error');
-            }
-        }
-    xhr.send(`id=${data.id}`);
-    }
-
-    if(action == 'done'){
-        xhr.onload = function() {
-            if(xhr.status == 200) {
-                let res = xhr.responseText;
-                document.getElementById(data.id).classList.add('done');
-                //showAlert('success', 'Ok');
-            } else {
-                console.log('error');
-            }
-        }
-    xhr.send(`id=${data.id}`);
-    }
+  let url = `/webgate/calendar/${action}event`;
+  // add
+  if(action == 'add'){
+    getApi(url, `title=${data.title}&body=${data.body}&date=${data.date}&type=${data.type}`)
+    .then((res) => res.json())
+    .then((json) => {
+      data['id'] = json;
+      console.log(json);
+      addEvent(data);
+      showAlert('success', 'Event added');
+    })
+    .catch(function() {
+        console.log("error");
+    });
+  }
+  // edit
+  if(action == 'update'){
+    getApi(url, `title=${data.title}&body=${data.body}&date=${data.date}&type=${data.type}&id=${data.id}`)
+    .then((res) => {
+      deleteEvent(data['id']);
+      addEvent(data);
+      showAlert('success', 'Event changed');
+    });
+  }
+  // delete
+  if(action == 'delete'){
+    getApi(url, `id=${data.id}`)
+    .then((res) => {
+      deleteEvent(data['id']);
+      showAlert('success', 'Event deleted');
+    });
+  }
+  // mark done
+  if(action == 'done'){
+    getApi(url, `id=${data.id}`)
+    .then((res) => {
+      document.getElementById(data.id).classList.add('done');
+    });
+  }
 }
+
+
 
 
 // edit event form

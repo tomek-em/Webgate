@@ -76,21 +76,7 @@ function getMonthEvents( last, month, year ) {
 
 
 function redirectToWeek(date) {
-    let f = document.createElement('form');
-    if(month_page) {
-      f.action ='week';
-    } else {
-      f.action ='calendar/month';
-    }
-    f.method = 'POST';
-
-    let i = document.createElement('input');
-    i.type = 'hidden';
-    i.name = 'date';
-    i.value = date;
-    f.appendChild(i);
-    document.body.appendChild(f);
-    f.submit();
+    window.location.replace(`week/${date}`);
 }
 
 
@@ -134,10 +120,13 @@ function showMonthCalendar(last, month, year) {
                 if(date == today_day && month == today_month && year == today_year) cell.classList.add('today');
 
                 cell.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('circle')) {
-                    } else {
-                        let day = e.target.innerHTML;
-                        redirectToWeek(`${year}-${month}-${day}`);
+                  if (e.target.classList.contains('month_cal_cell')) {
+                    let day = e.target.firstChild.innerHTML;
+                    redirectToWeek(`${year}-${month}-${day}`);
+                  }
+                    if (e.target.classList.contains('day_link')) {
+                      let day = e.target.innerHTML;
+                      redirectToWeek(`${year}-${month}-${day}`);
                     }
                 });
                 // if(!(month_page))showTodayEvent();

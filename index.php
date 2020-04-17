@@ -13,9 +13,9 @@
     require_once('modules/Calendar.php');
     require_once('modules/Bookmarks.php');
 
-    require_once('mod/Usr.php');
-    require_once('mod/Cal.php');
-    require_once('mod/BMark.php');
+    require_once('models/Usr.php');
+    require_once('models/Cal.php');
+    require_once('models/BMark.php');
 
 
     $init = new Core;
