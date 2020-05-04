@@ -99,7 +99,7 @@
 
     <footer class="footer bg-dark text-light">
         <div class="container">
-            <p class="">Sticky Footer</p>
+            <p class="">&copy; Copyright 2020 - Webgate</p>
         </div>
     </footer>
 

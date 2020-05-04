@@ -4,19 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo APP_NAME; ?> </title>
-    
+
     <!-- Google fonts -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Poppins&display=swap" rel="stylesheet">
-    
+
     <!-- Bootstrap core CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-    
+
      <!-- Font awesome -->
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    
+
     <link rel="stylesheet" href="<?php echo URL_ROOT ?>web/css/main.css">
     <link rel="stylesheet" href="<?php echo URL_ROOT ?>web/css/week.css">
-    
+
 </head>
 
 <body>
@@ -25,7 +25,7 @@
             <!-- Navbar -->
             <?php require(APP_ROOT.'inc/nav.php'); ?>
         </header>
-            
+
         <div id="confirm_del_alert" class="">
                 <p>Are you sure you want to delete slots for this day?</p>
             <div class="row">
@@ -36,28 +36,28 @@
                     <a href="#" id="cancel_del" class="btn btn-secondary">Cancel</a>
                 </div>
             </div>
-        </div>    
-        
+        </div>
+
         <div class="container-fluid" id="calendar_wrapper">
             <div class="row">
                 <div class="col-lg-10 mx-auto">
-                    
+
                     <div class="row mt-4 mb-3">
                         <div class="col-lg-12 text-center">
                             <h2 id="cal_title">Webgate slot calendar </h2>
                         </div>
-      
+
                     </div>
-                    
+
                     <!-- Show week events   -->
-                    
+
                     <div class="week_cal">
                         <div class="week_header mb-2">
                             <div class="week_cal_nav">
                                 <a href="#" id="prev" class="nav_arr"> <i class="fa fa-chevron-circle-left"></i> </a>
                                 <a href="#" id="next" class="nav_arr">  <i class="fa fa-chevron-circle-right"></i> </a>
-                            </div>  
-  
+                            </div>
+
                             <div id="select_usr">
                                 <a href="#" id="cur_usr" class="btn btn_blue">Select user</a>
                                 <ul class="usr_list">
@@ -132,16 +132,16 @@
                     </div>
                 </div>
             </div>
-        </div> <!-- End of Container -- -->
-        
-        
-        
-        
+        </div> <!-- End of Container - - -->
+
+
+
+
         <!--  ADD SLOTS WINDOW -->
         <div class="card card-body bg-light mb-4 event_window" id="slot_form_cont">
             <h2 id="form_title">Add slots</h2>
             <form action='' method="post" id="slot_form">
-                
+
                 <!-- Start time -->
                 <div class="form-group mt-4 time_group">
                     <label for="start_time">Start Time:<sup>*</sup></label>
@@ -169,7 +169,7 @@
                     </select>
                 </div>
 
-                
+
                 <div class="form-group">
                     <label for="name">Date: <sup>*</sup></label>
                     <input type="date" name="date" id="form_date" class="form-control form-control-lg">
@@ -186,20 +186,20 @@
                 </div>
             </form>
         </div>
-        
-        
+
+
     </div> <!-- End of content div -->
-    
+
     <footer class="footer bg-dark text-light">
         <div class="container">
-            <p class="">Sticky Footer</p>
+            <p class="">&copy; Copyright 2020 - Webgate</p>
         </div>
     </footer>
-    
-    
-    
+
+
+
     <script>
-        
+
         let current_date = 0;
         let SESSION_USR = '<?php echo $_SESSION['user_name']; ?>';
         // date from month claendar
@@ -208,4 +208,3 @@
     <script src="<?php echo URL_ROOT ?>web/js/slots.js"></script>
 </body>
 </html>
-
