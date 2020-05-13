@@ -291,7 +291,7 @@ nav.bg-dark {
 
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
   .main_container {
     min-height: 300px;
   }
@@ -400,7 +400,7 @@ nav.bg-dark {
   color: #ddd;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
   #calendar .month_cal_week {
     height: 36px;
   }
@@ -497,6 +497,10 @@ nav.bg-dark {
 }
 
 @media (max-width: 1400px) {
+  .bm_box {
+    width:540px;
+  }
+
   .event_text {
     min-width: 300px;
   }
@@ -505,7 +509,7 @@ nav.bg-dark {
 
 
 .event_text h2 {
-  font-size: 2.8em;
+  font-size: 2.6em;
   font-weight: 600;
 }
 .event_text a .normal {
@@ -731,7 +735,7 @@ nav.bg-dark {
 
 /* Main Page bottom */
 .picture_details {
-  position: absolute;
+  position: fixed;
   bottom: 6px;
   left: 6px;
   color: #eee;
@@ -758,7 +762,7 @@ nav.bg-dark {
 }
 
 .copyright {
-  position: absolute;
+  position: fixed;
   bottom: 6px;
   right: 8px;
   color: #eee;
