@@ -39,10 +39,10 @@ body {
     display: flex;
     flex-direction: column;
     font-family: 'poppins', sans-serif;
-    overflow-x: hidden;
+
 }
 
-@media only screen and (max-width: 1400px) {
+@media (max-width: 1400px) {
   body {
     font-size: 0.9em;
   }
@@ -83,7 +83,7 @@ footer {
     text-align: center;
 }
 
-@media only screen and (max-width: 1400px) {
+@media (max-width: 1400px) {
   footer {
     min-height: 50px;
     line-height: 50px
@@ -136,7 +136,7 @@ nav.navbar a {
     font-weight: 400;
 }
 
-@media only screen and (max-width: 1100px) {
+@media (max-width: 1100px) {
     .main_menu {
         width: 66%;
         justify-content: flex-start;
@@ -197,7 +197,7 @@ nav.navbar a:hover {
         font-weight: 400;
     }
 
-@media only screen and (max-width: 768px) {
+@media (max-width: 768px) {
     .main_menu {
         width: auto;
         justify-content: space-between;
@@ -252,7 +252,7 @@ nav.bg-dark {
     color: #eee;
 }
 
-@media only screen and (max-width: 768px) {
+@media (max-width: 768px) {
     .no_link {
         display: none;
     }
@@ -291,10 +291,9 @@ nav.bg-dark {
 .box_wrapper {
   height: 90%;
   width: 100%;
-  /*  */
   color: #fff;
   position: relative;
-
+  overflow: hidden;
 }
 
 .dots {
@@ -342,7 +341,7 @@ nav.bg-dark {
   font-size: 3.4em;
 }
 
-@media only screen and (max-width: 1400px) {
+@media (max-width: 1400px) {
   .content_box h1 {
     font-size: 6.2em;
   }
@@ -392,7 +391,7 @@ nav.bg-dark {
   color: #ddd;
 }
 
-@media only screen and (max-width: 768px) {
+@media (max-width: 768px) {
   .main_container {
     top: 10%;
     height: 70%;
@@ -482,7 +481,7 @@ nav.bg-dark {
   color: #fff;
 }
 
-@media only screen and (max-width: 1400px) {
+@media (max-width: 1400px) {
   .event_text {
     min-width: 300px;
   }
@@ -504,7 +503,7 @@ nav.bg-dark {
   text-decoration: none;
 }
 
-@media only screen and (max-width: 1400px) {
+@media (max-width: 1400px) {
   .event_text h2 {
     font-size: 1.6em;
   }
@@ -514,7 +513,7 @@ nav.bg-dark {
   }
 }
 
-@media only screen and (max-width: 768px) {
+@media (max-width: 768px) {
   .bm_box {
     width: 96%;
   }
@@ -550,7 +549,7 @@ nav.bg-dark {
     letter-spacing: 2px;
 }
 
-@media only screen and (max-width: 1400px) {
+@media (max-width: 1400px) {
   #location_name {
     font-weight: 500;
   }
@@ -570,7 +569,7 @@ nav.bg-dark {
     text-align: right;
 }
 
-@media only screen and (max-width: 768px) {
+@media (max-width: 768px) {
     .geo {
       top: 50px;
     }
@@ -626,7 +625,7 @@ nav.bg-dark {
 }
 
 
-@media only screen and (max-width: 768px) {
+@media (max-width: 768px) {
     #bookmark_form_cont {
         width: 90%;
     }
@@ -657,7 +656,7 @@ nav.bg-dark {
     overflow-y: scroll;
 }
 
-@media only screen and (max-width: 1400px) {
+@media (max-width: 1400px) {
     #bookmark_cont {
       width: 600px;
     }
@@ -750,7 +749,7 @@ nav.bg-dark {
   color: #ccc;
 }
 
-@media only screen and (max-width: 768px) {
+@media (max-width: 768px) {
   .picture_details {
     bottom: 28px;
     right: 16px;
@@ -781,6 +780,8 @@ nav.bg-dark {
   align-items: center;
 }
 
-.waiting_layer img {
-
+@media (max-width: 2000px) {
+  .maxw_500 {
+    max-width: 500px;
+  }
 }

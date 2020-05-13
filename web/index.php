@@ -21,9 +21,6 @@
 </head>
 
 <body>
-    <div id = "waiting_scr">
-        <p> Loading... Please wait</p>
-    </div>
 
     <div class="content hero_image" id="hero_img">
         <header>
@@ -50,6 +47,7 @@
 
       <div class="waiting_layer" id="waiting_layer"> <img src="<?php echo URL_ROOT.'web/img/spinner.gif'?>"> </div>
       <div class="main_container" id="main_cont">
+
         <div class="box_wrapper">
           <!-- Main box -->
           <div id="main_box" class="content_box">
