@@ -274,6 +274,8 @@ nav.bg-dark {
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
+    /* changed 12-5-2020 */
+    overflow-x: hidden;
 }
 
 .main_container {
@@ -281,11 +283,18 @@ nav.bg-dark {
   position: absolute;
   top: 20%;
   height: 60%;
-
+  min-height: 480px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+
+}
+
+@media (max-width: 1200px) {
+  .main_container {
+    min-height: 300px;
+  }
 }
 
 .box_wrapper {
@@ -293,7 +302,7 @@ nav.bg-dark {
   width: 100%;
   color: #fff;
   position: relative;
-  overflow: hidden;
+
 }
 
 .dots {
@@ -391,6 +400,12 @@ nav.bg-dark {
   color: #ddd;
 }
 
+@media (max-width: 1200px) {
+  #calendar .month_cal_week {
+    height: 36px;
+  }
+}
+
 @media (max-width: 768px) {
   .main_container {
     top: 10%;
@@ -398,11 +413,11 @@ nav.bg-dark {
   }
 
   .content_box h1 {
-    font-size: 4em;
+    font-size: 4.8em;
   }
 
   #calendar .month_cal_week {
-    height: 40px;
+    height: 30px;
   }
 
   #calendar .month_cal_cell {
@@ -472,7 +487,7 @@ nav.bg-dark {
 .event_text {
   display: none;
   position: absolute;
-  top: 40px;
+  top: 30px;
   left: 50%;
   transform: translateX(-50%);
   min-width: 600px;
@@ -652,7 +667,7 @@ nav.bg-dark {
     top: 50px;
     left: 50%;
     transform: translateX(-50%);
-    max-height: 150px;
+    max-height: 160px;
     overflow-y: scroll;
 }
 
@@ -660,12 +675,16 @@ nav.bg-dark {
     #bookmark_cont {
       width: 600px;
     }
+}
+
+.list-group {
+  display: flex;
+  justify-content: space-between;
 
 }
 
 .list-group-item {
-    display: flex;
-    justify-content: space-between;
+  padding: 0.4rem 1.25rem;
 }
 
 .list-group-item a {
