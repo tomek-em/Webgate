@@ -266,15 +266,13 @@ nav.bg-dark {
 
 /* MAIN PAGE / Bookmarks  */
 .hero_image {
-    /* background-image:  linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 1)), url('../img/mike-kotsch-xAgvgQpYsf4-unsplash.jpg'); */
-    background: rgba(20, 20, 20, 0.9);
+    background-color: #222;
     height: 100%;
 
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
-    /* changed 12-5-2020 */
     overflow-x: hidden;
 }
 

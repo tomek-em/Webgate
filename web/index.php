@@ -26,11 +26,6 @@
         <header>
             <!-- Navbar -->
             <?php require(APP_ROOT.'inc/nav.php'); ?>
-<!--
-            <div class="weather_box">
-                <p>Description:</p>
-            </div>
--->
         </header>
 
         <div class="geo">
@@ -45,9 +40,10 @@
           <div class="location"><a id="weather_credit" href="https://darksky.net/poweredby/"></a></div>
         </div>
 
+      <!-- Loading screen div shows only on hero image loading -->
       <div class="waiting_layer" id="waiting_layer"> <img src="<?php echo URL_ROOT.'web/img/spinner.gif'?>"> </div>
-      <div class="main_container" id="main_cont">
 
+      <div class="main_container" id="main_cont">
         <div class="box_wrapper">
           <!-- Main box -->
           <div id="main_box" class="content_box">

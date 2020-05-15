@@ -1,6 +1,3 @@
-/* show alert about location using , maybe during login
- * add btn "allow" in weather box for not logged in
-*/
 
 (function() {
 let bookmarks = [];
@@ -52,6 +49,7 @@ function getRandom(num) {
   return Math.floor(Math.random()*num);
 }
 
+// set local time for location and select picture daytime
 function getDayTime(time, loc) {
   if(time < 5 || time >= 20) {
     return 0;
@@ -66,24 +64,32 @@ function getDayTime(time, loc) {
   }
 }
 
+function showPicture(url) {
+  const waiting_scr = document.getElementById('waiting_layer');
+  const bg_pic = document.getElementById('hero_img');
+  console.log(url);
+  let image = new Image();
+  image.onload = function(){
+     bg_pic.style.backgroundImage = (`linear-gradient(to bottom, rgba(0,0,0, 0.05) 0%,rgba(0,0,0,0.4) 1%,rgba(0,0,0,0.1) 100%),
+     url( ${url} ) `);
+     if( waiting_scr ) waiting_scr.remove();
+  };
+  image.src = url;
+}
 
-function showPicture(loc, daytime) {
-  const picture = document.getElementById('hero_img');
+function setHero(loc, daytime) {
   const place = document.getElementById('pic_name');
   const credit = document.querySelector('.picture_details a');
 
-  let url = `url(web/img/bg/${loc}/${loc}-${daytime}.jpg)`;
-  let url2 = "url(web/img/bg/ama/ama-d.jpg)";
-  document.getElementById('hero_img').style.backgroundImage = `linear-gradient(to bottom, rgba(0,0,0, 0) 0%,rgba(0,0,0,0.9) 1%,rgba(0,0,0,0.9) 100%), ${url}`;
-  document.getElementById('hero_img').style.backgroundImage = `linear-gradient(to bottom, rgba(0,0,0, 0) 0%,rgba(0,0,0,0.4) 1%,rgba(0,0,0,0.1) 100%), ${url}`;
-  // setTimeout(function() {
-  //   document.getElementById('hero_img').style.backgroundImage = `linear-gradient(to bottom, rgba(0,0,0, 0) 0%,rgba(0,0,0,0.4) 1%,rgba(0,0,0,0.1) 100%), ${url}`;
-  // }, 800);
+  let pic_loc = `web/img/bg/${loc}/${loc}-${daytime}.jpg`;
+  showPicture(pic_loc);
+  // picture.style.backgroundImage = `linear-gradient(to bottom, rgba(0,0,0, 0) 0%,rgba(0,0,0,0.4) 1%,rgba(0,0,0,0.1) 100%), ${url}`;
+
   place.innerHTML = pic_inf[loc][4];
   credit.innerHTML = `photo by: ${pic_inf[loc][daytime]}`;
 }
 
-function selectPicture(loc_switch) {
+function selectPicture(loc_europe) {
   let date = new Date();
   let day = date.getDay();
   //day = 0;
@@ -95,10 +101,11 @@ function selectPicture(loc_switch) {
   let location_time;
   let daytime;
 
+  // Select localization algorithm
   loc_num = Math.floor((day)%3);
   console.log(day, loc_num);
 
-  if(loc_switch) {
+  if(loc_europe) {
     cur_location = europe.loc[loc_num];
     location_time = time;
   } else {
@@ -112,15 +119,16 @@ function selectPicture(loc_switch) {
   }
 
   daytime = getDayTime(location_time, cur_location);
-  showPicture(cur_location, daytime);
+  setHero(cur_location, daytime);
 }
 
+// Set hero images intarval
 function setPicture() {
-  let loc_switch = true;
-  selectPicture(loc_switch);
+  let loc_europe = true;
+  selectPicture(loc_europe);
   setInterval( () => {
-    loc_switch = !loc_switch;
-    selectPicture(loc_switch);
+    loc_europe = !loc_europe;
+    selectPicture(loc_europe);
   }, 120000);
 }
 
@@ -404,13 +412,16 @@ function addEventListeners() {
     document.getElementById('hide_wid').addEventListener('click', (e) => {
       main_cont.classList.toggle('d-none');
     })
-};
+};  // END of EventListeners
+
+
+// Remove loading / waiting screen
+function removeWaitingScr() {
+  document.getElementById('waiting_layer').remove();
+}
 
 // ----
 function setMainPage() {
-    setTimeout(() => {
-      document.getElementById('waiting_layer').remove();
-    }, 250);
     getLocation();
     getTime();
     setInterval (getTime, 60000);
