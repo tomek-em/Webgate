@@ -4,21 +4,23 @@ let bookmarks = [];
 
 const pic_inf = {
   gda: ['Image by Gruu from Pixabay', 'Natalia Mejer', 'judy-vos-WiO6iMq-nfs-unsplash', '', 'Gdańsk' ],
-  pol: ['', 'Janusz Maniak on Unsplash', 'Sacre Bleu on Unsplash', '', 'Poland'],
-  nyc: ['','','Todd Quackenbush on Unsplash','', 'New York City'],
+  pol: ['', 'Janusz Maniak on Unsplash', 'Photo by Anna Augustowska on Unsplash', '', 'Poland'],
+  nyc: ['','','Photo by Jonathan Riley on Unsplash','', 'New York City'],
   ama:['','vishnu-prasad-VGWnXfbf-G4-unsplash.jpg','','', 'Amazon rain forest'],
   por:['Pier Francesco Grizi on Unsplash', 'Andreas Brücker on Unsplash', 'Mélanie Martin on Unsplash', '', 'Portugal'],
-  rio:['Gabriel Santos on Unsplash', 'Davi Costa on Unsplash', 'Raphael Nogueira on Unsplash', '', 'Rio de Janeiro']
+  rio:['Gabriel Santos on Unsplash', 'Davi Costa on Unsplash', 'Raphael Nogueira on Unsplash', '', 'Rio de Janeiro'],
+  nor:['Photo by Kristin Wilson on Unsplash','Photo by Valdemaras D. on Unsplash','Photo by Maksim Shutov on Unsplash','','Norwegia'],
+  ari:['Photo by lovely shots on Unsplash','Photo by Carles Turon on Unsplash','Photo by Mar Bocatcat on Unsplash','','Monument Valley AZ']
 }
 
 
 const europe = {
-  loc: ['gda', 'pol', 'por'],
+  loc: ['gda', 'pol', 'por', 'nor'],
  };
 
 const world = {
-  loc: [ 'nyc', 'ama', 'rio'],
-  timezone: [-6, -5, -3],
+  loc: [ 'nyc', 'ama', 'rio', 'ari'],
+  timezone: [-6, -5, -3, -7],
 };
 
 function showAlert(type, text) {
@@ -90,20 +92,18 @@ function setHero(loc, daytime) {
 }
 
 function selectPicture(loc_europe) {
-  let date = new Date();
-  let day = date.getDay();
-  //day = 0;
-  if(day == 1) day = 2;
-  if(day == 0) day = 1;
-  let time = date.getHours();
+  let fulldate = new Date();
+  let date = fulldate.getDate();
+  date = date;
+  let time = fulldate.getHours();
   let loc_num;
   let cur_location;
   let location_time;
   let daytime;
 
   // Select localization algorithm
-  loc_num = Math.floor((day)%3);
-  console.log(day, loc_num);
+  loc_num = Math.floor((date)%4);
+  console.log(date, loc_num);
 
   if(loc_europe) {
     cur_location = europe.loc[loc_num];
