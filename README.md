@@ -1,7 +1,7 @@
 # Webgate
 Webgate is an event calendar and filterable bookmarks list in one application.
 
-Create an account to make your bookmark list and add events to calnedar.
+Create an account to make your bookmark list and add events to calendar.
 Webgate has also test version of time slots calendar which allows users to book time at another users.
 
 
