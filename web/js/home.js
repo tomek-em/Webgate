@@ -1,6 +1,7 @@
 
 (function() {
 let bookmarks = [];
+let filtered_value;
 
 const pic_inf = {
   gda: ['Image by Gruu from Pixabay', 'Natalia Mejer', 'judy-vos-WiO6iMq-nfs-unsplash', '', 'Gdańsk' ],
@@ -34,15 +35,7 @@ function showAlert(type, text) {
     setTimeout(() => document.querySelector('#alert').remove(), 3000);
 }
 
-function showBookmarkCont() {
-    document.getElementById('bookmark_input').value = '';
-    const list = document.querySelectorAll('#bookmark_cont ul li');
-    list.forEach((li) => {
-       li.style.display = '';
-    });
 
-    document.querySelector('#bookmark_cont').classList.toggle('d-block');
-}
 
 
 /* Set picture*/
@@ -69,7 +62,6 @@ function getDayTime(time, loc) {
 function showPicture(url) {
   const waiting_scr = document.getElementById('waiting_layer');
   const bg_pic = document.getElementById('hero_img');
-  console.log(url);
   let image = new Image();
   image.onload = function(){
      bg_pic.style.backgroundImage = (`linear-gradient(to bottom, rgba(0,0,0, 0.05) 0%,rgba(0,0,0,0.4) 1%,rgba(0,0,0,0.1) 100%),
@@ -103,7 +95,7 @@ function selectPicture(loc_europe) {
 
   // Select localization algorithm
   loc_num = Math.floor((date)%4);
-  console.log(date, loc_num);
+  // console.log(date, loc_num);
 
   if(loc_europe) {
     cur_location = europe.loc[loc_num];
@@ -151,13 +143,24 @@ function getTime() {
 
 /* BOKMARKS */
 
+function showBookmarkCont() {
+    document.getElementById('bookmark_input').value = '';
+    const list = document.querySelectorAll('#bookmark_cont ul li');
+    list.forEach((li) => {
+       li.style.display = '';
+    });
+
+    document.querySelector('#bookmark_cont').classList.toggle('d-block');
+    document.getElementById('google_search').style.display = 'none';
+}
+
 function filterBookmarks() {
     let cont = document.querySelector('#bookmark_cont');
     cont.classList.add('d-block');
+    document.getElementById('google_search').style.display = '';
 
     // get value of input
     filtered_value = document.querySelector('#bookmark_input').value.toLocaleLowerCase();
-    console.log(filtered_value);
 
     // get li-s from ul
     let ul = document.querySelector('#bookmark_cont ul');
@@ -168,7 +171,7 @@ function filterBookmarks() {
         if(a.innerHTML.toLowerCase().indexOf(filtered_value) > -1) {
             li[i].style.display = '';
         } else {
-            li[i].style.display = 'none';
+            if( li[i].id != 'google_search' ) li[i].style.display = 'none';
         }
     }
 }
@@ -189,6 +192,14 @@ function createBookmarkList(logged) {
         }
     }
 
+    // add google search bookmark
+    bookmarks.push({
+      title: 'Search on google',
+      web: '',
+      id: 'google_search'
+    });
+
+
     bookmarks.forEach((bmr) => {
         let li = document.createElement('li');
         let bm_link = document.createElement('div');
@@ -199,7 +210,9 @@ function createBookmarkList(logged) {
         li.classList.add('list-group-item');
         li.addEventListener('click', (e) => {
           if(e.target.classList.contains('rmv')) {
-
+            //
+          } else if (e.target.id == 'google_search' || e.target.parentElement.id == 'google_search') {
+            window.open(`https://google.com/search?q=${filtered_value}`, '_blank');
           } else {
             window.open(bmr.web, '_blank');
           }
@@ -214,7 +227,7 @@ function createBookmarkList(logged) {
         rmv.innerHTML = 'Remove';
 
         li.appendChild(a);
-        li.appendChild(rmv);
+        if( li.id != 'google_search' ) li.appendChild(rmv);
         list.appendChild(li);
 
     });
@@ -263,8 +276,8 @@ function getBookmarks() {
     json.forEach((ev, i) =>  {
       clearBookmarkList();
       bookmarks = json;
-      createBookmarkList(true);
     });
+    createBookmarkList(true);
   })
   .catch(function() {
       console.log("error");
@@ -288,7 +301,7 @@ function getWeather(lat, lon) {
     // using promises
     const proxy = 'https://cors-anywhere.herokuapp.com/';
     const api = `${proxy}https://api.darksky.net/forecast/9afe9add45c0ea9bd31b62c5c3b7d0bf/${lat},${lon}?units=si`;
-    console.log(api);
+
     fetch(api)
         .then(response => response.json())
         .then(data => {
@@ -342,7 +355,7 @@ function addEventListeners() {
     const calendar = document.getElementById('calendar');
     const event_text = document.getElementById('event_text');
 
-    // event - show add bookmark form
+    // event - show 'add bookmark' form
     document.querySelector('#new_bookmark_btn').addEventListener('click', (e) => {
         // check if logged in
         if (SESSION_USR) form_cont.classList.add('d-block');
@@ -351,7 +364,7 @@ function addEventListeners() {
         }
     });
 
-    // even - add bookmark submit
+    // even - 'add bookmark' submit
     document.querySelector('#bookmark_form').addEventListener('submit', (e) => {
         e.preventDefault();
         form_cont.classList.remove('d-block');
@@ -382,6 +395,13 @@ function addEventListeners() {
 
     // event - search for bookmark
     search_input.addEventListener('keyup', filterBookmarks);
+
+    // search on Enter key
+    document.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && filtered_value != null) {
+        window.open(`https://google.com/search?q=${filtered_value}`, '_blank');
+      }
+    });
 
     // event - delete bookm
     document.querySelector('#bookmark_cont').addEventListener('click', (e) => {
