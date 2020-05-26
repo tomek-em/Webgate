@@ -1,10 +1,5 @@
 /*
-* what next?
-* use data atributes data like event body: (data-body)
-* oop
-* return ok for methods checked
-* alert div created in js
-* for() to forEach ??
+Week calendar js file
 */
 (function(){
 
@@ -135,7 +130,6 @@ function sendData(action, data) {
     .then((res) => res.json())
     .then((json) => {
       data['id'] = json;
-      console.log(json);
       addEvent(data);
       showAlert('success', 'Event added');
     })
@@ -160,6 +154,7 @@ function sendData(action, data) {
       showAlert('success', 'Event deleted');
     });
   }
+
   // mark done
   if(action == 'done'){
     getApi(url, `id=${data.id}`)
@@ -196,7 +191,6 @@ function getFormData() {
     data['body'] = body.value;
     data['type'] = type.value;
 
-    console.log(data['title']);
     return data;
 }
 

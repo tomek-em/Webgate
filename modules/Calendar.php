@@ -64,14 +64,12 @@ class Calendar extends Core {
     }
 
     // delete event
-        public function deleteEvent() {
-
+    public function deleteEvent() {
         if(($_SERVER['REQUEST_METHOD'] == 'POST') && (isset($_SESSION['user_id'])))  {
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
             $event_id = trim($_POST['id']);
             $response = $this->events->deleteSingleEvent($event_id);
             if($response) {
-                $response = 'deleted';
+                $response = 'Event '.print_r($event_id).' deleted';
             } else {
                 $response = 'not';
             }
