@@ -1,7 +1,5 @@
 <?php
-/*
-*   App info...
-*/
+
     require_once('conf/conf.php');
     require_once('lib/session.php');
     require_once('lib/Database.php');
