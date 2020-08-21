@@ -1,12 +1,12 @@
 <?php
 
-class Usr {
+class UserModel {
     private $db;
-    
+
     public function __construct() {
         $this->db = new Database;
     }
-    
+
     // register user function ---------------
     public function registerUser($data) {
         $this->db->query('INSERT INTO users (name, email, password) VALUES(:name, :email, :password)');
@@ -37,16 +37,16 @@ class Usr {
             return false;
         }
     }
-    
+
     public function getUserByName($name) {
         $this->db->query("SELECT id FROM users WHERE name = :name");
         $this->db->bind(':name', $name);
-        
+
         $row = $this->db->single();
         return $row->id;
     }
 
-    
+
     // login user
     public function logInUser($name, $password) {
         $this->db->query("SELECT * FROM users WHERE name = :name");
@@ -61,10 +61,10 @@ class Usr {
             return false;
         }
     }
-    
+
     // get all users
     public function getAllUsers(){
-        $this->db->query('SELECT name FROM users');
+        $this->db->query('SELECT * FROM users');
 
         $users = $this->db->resultSet();
         return $users;

@@ -7,4 +7,6 @@
     define('APP_NAME', 'WebGate');
     define('URL_ROOT', '/webgate/');
     define('APP_ROOT', dirname(__DIR__).'/web/');
+
+    define('API_KEY', 'testkey');  //not used yet
 ?>

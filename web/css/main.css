@@ -466,6 +466,14 @@ nav.bg-dark {
     color: #fff;
 }
 
+.bm_link {
+
+}
+
+.list-group-item .bm_group{
+  color: #766;
+}
+
 .input_box {
   width: 96%;
 }
@@ -695,11 +703,13 @@ nav.bg-dark {
 
 .list-group-item:hover {
     background: #4280A4;
+    cursor: pointer;
 }
 
 .list-group-item:hover a {
     text-decoration: none;
     color: #FFF;
+    cursor: pointer;
 }
 
 .bm_link {
@@ -709,11 +719,13 @@ nav.bg-dark {
     overflow-x: hidden;
 }
 
+
 .list-group-item .rmv {
     font-size: 1em;
     color: #777;
     cursor: pointer;
 }
+
 
 
 
@@ -773,11 +785,15 @@ nav.bg-dark {
 @media (max-width: 768px) {
   .picture_details {
     bottom: 28px;
-    right: 16px;
+    right: 0px;
     left: auto;
   }
+  .picture_details #pic_name {
+    padding: 0;
+  }
+
   .picture_details a {
-    font-size: 0.6em;
+    display: none;
   }
 
   .copyright {

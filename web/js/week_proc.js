@@ -3,7 +3,6 @@ Week calendar js file
 */
 (function(){
 
-//let events = {};
 let weekDates = {};
 
 function setNewDates(dates) {
@@ -153,7 +152,7 @@ function sendData(action, data) {
   }
   // delete
   if(action == 'delete'){
-    getApi(url, `id=${data.id}`)
+    deleteReq(`${url}/${data.id}`)
     .then((res) => {
       deleteEvent(data['id']);
       showAlert('success', 'Event deleted');
@@ -388,10 +387,6 @@ function clearCalendar() {
 function createWeekCalendar(customDate, weekIndex) {
     let dates = [];
     let date = new Date();
-
-//    setTimeout(() => {
-//        document.getElementById('spinner').remove();
-//    }, 500);
 
     if (customDate != 0) {
         date = new Date(customDate);

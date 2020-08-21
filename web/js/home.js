@@ -79,7 +79,7 @@ function setHero(loc, daytime) {
   showPicture(pic_loc);
   // picture.style.backgroundImage = `linear-gradient(to bottom, rgba(0,0,0, 0) 0%,rgba(0,0,0,0.4) 1%,rgba(0,0,0,0.1) 100%), ${url}`;
 
-  place.innerHTML = pic_inf[loc][4];
+  place.innerHTML = `Photo: ${pic_inf[loc][4]}`;
   credit.innerHTML = `photo by: ${pic_inf[loc][daytime]}`;
 }
 
@@ -141,6 +141,7 @@ function getTime() {
 
 
 
+
 /* BOKMARKS */
 
 function showBookmarkCont() {
@@ -152,12 +153,14 @@ function showBookmarkCont() {
 
     document.querySelector('#bookmark_cont').classList.toggle('d-block');
     document.getElementById('google_search').style.display = 'none';
+    document.getElementById('youtube_search').style.display = 'none';
 }
 
 function filterBookmarks() {
     let cont = document.querySelector('#bookmark_cont');
     cont.classList.add('d-block');
     document.getElementById('google_search').style.display = '';
+    document.getElementById('youtube_search').style.display = '';
 
     // get value of input
     filtered_value = document.querySelector('#bookmark_input').value.toLocaleLowerCase();
@@ -171,7 +174,7 @@ function filterBookmarks() {
         if(a.innerHTML.toLowerCase().indexOf(filtered_value) > -1) {
             li[i].style.display = '';
         } else {
-            if( li[i].id != 'google_search' ) li[i].style.display = 'none';
+            if( li[i].id != 'google_search' && li[i].id != 'youtube_search' ) li[i].style.display = 'none';
         }
     }
 }
@@ -194,12 +197,17 @@ function createBookmarkList(logged) {
 
     // add google search bookmark
     bookmarks.push({
-      title: 'Search on google',
+      title: 'Search on google ',
       web: '',
       id: 'google_search'
     });
+    bookmarks.push({
+      title: 'Search on youtube ',
+      web: '',
+      id: 'youtube_search'
+    });
 
-
+    // Create Li for each bookmark item
     bookmarks.forEach((bmr) => {
         let li = document.createElement('li');
         let bm_link = document.createElement('div');
@@ -208,29 +216,90 @@ function createBookmarkList(logged) {
 
         li.id = bmr.id;
         li.classList.add('list-group-item');
+
         li.addEventListener('click', (e) => {
           if(e.target.classList.contains('rmv')) {
             //
           } else if (e.target.id == 'google_search' || e.target.parentElement.id == 'google_search') {
             window.open(`https://google.com/search?q=${filtered_value}`, '_blank');
+
+          } else if (e.target.id == 'youtube_search' || e.target.parentElement.id == 'youtube_search') {
+            window.open(`https://www.youtube.com/results?search_query=${filtered_value}`, '_blank');
+
           } else {
             window.open(bmr.web, '_blank');
           }
         });
 
-        //a.href = bmr.web;
         a.setAttribute('target', '_blank');
         a.classList.add('bm_link');
-        a.innerHTML = bmr.title;
+
+        // add icons to google search
+        if(bmr.id == 'google_search') {
+          let google_icon = document.createElement('i');
+
+          google_icon.id = 'google_icon';
+          google_icon.classList.add('fa');
+          google_icon.classList.add('fa-google');
+
+          a.appendChild(google_icon);
+          a.insertAdjacentHTML( 'beforeend', ' ' );
+        }
+        // add icons to yt search
+        if(bmr.id == 'youtube_search') {
+          let yt_icon = document.createElement('i');
+
+          yt_icon.id = 'google_icon';
+          yt_icon.classList.add('fa');
+          yt_icon.classList.add('fa-youtube');
+
+          a.appendChild(yt_icon);
+          a.insertAdjacentHTML( 'beforeend', ' ' );
+        }
+
+        a.insertAdjacentHTML( 'beforeend', bmr.title );
 
         rmv.classList.add('rmv');
         rmv.innerHTML = 'Remove';
 
         li.appendChild(a);
-        if( li.id != 'google_search' ) li.appendChild(rmv);
+        if( li.id != 'google_search' && li.id != 'youtube_search' ) li.appendChild(rmv);
         list.appendChild(li);
 
+
+        // create li element for each bookmark group
+          if(bmr.bm_group) {
+            let gr_li = document.createElement('li');
+            let gr_bm_link = document.createElement('div');
+            let gr_a = document.createElement('a');
+
+            gr_li.id = bmr.id;
+            gr_li.classList.add('list-group-item');
+            gr_li.classList.add('bm_group_item');
+            gr_li.addEventListener('click', (e) => {
+                selectBookmarkGroup(bmr.bm_group);
+            });
+
+            gr_a.setAttribute('target', '_blank');
+            gr_a.classList.add('bm_link');
+            gr_a.classList.add('bm_group');
+            gr_a.innerHTML = bmr.bm_group;
+
+            gr_li.appendChild(gr_a);
+            // list.appendChild(gr_li);
+          }
     });
+
+}
+
+function selectBookmarkGroup(group){
+  document.querySelector('#bookmark_cont').classList.remove('d-block');
+  let bookmark_list = document.querySelector('#bookmark_cont ul').childNodes;
+  bookmark_list.forEach((el) => {
+    console.log(el);
+  });
+
+  // TODO: shwo new fixed 100vh div with list of group items
 }
 
 function addBookmark(title, web, group) {
@@ -250,10 +319,12 @@ function addBookmark(title, web, group) {
 function deleteBookmark(id) {
   let url = '/webgate/bookmarks/deletebookmark';
 
-  getApi(url, `id=${id}`)
+  deleteReq(`${url}/${id}`)
   .then((res) => {
+    if(res) {
       document.getElementById(id).remove();
       showAlert('success', 'Bookmark deleted');
+    }
     })
     .catch(function() {
         console.log("error");
@@ -273,10 +344,12 @@ function getBookmarks() {
   getApi(url, ``)
   .then((res) => res.json())
   .then((json) => {
-    json.forEach((ev, i) =>  {
-      clearBookmarkList();
-      bookmarks = json;
+    clearBookmarkList();
+    // bookmarks = json;
+    json.forEach((item, i) => {
+      bookmarks.push(item);
     });
+
     createBookmarkList(true);
   })
   .catch(function() {
@@ -289,7 +362,7 @@ function getBookmarks() {
 // LOCATION & WEATHER --
 
 function showLocation(loc) {
-    document.querySelector('#location_name').innerHTML = `${loc}, `;
+    document.querySelector('#location_name').innerHTML = `${loc}`;
 }
 
 
@@ -308,7 +381,7 @@ function getWeather(lat, lon) {
             let temp = Math.floor(data.currently.temperature);
 
             let description = data.currently.summary;
-            temperature_deg.textContent = `${temp} C `;
+            temperature_deg.textContent = `weather: ${temp} C `;
             weather_description.textContent = description;
 
             weather_credit.innerHTML = 'Powered by Dark Sky';
@@ -387,8 +460,10 @@ function addEventListeners() {
     // event - bookmarks
     main_area.addEventListener('click', (e) => {
         if(e.target.classList.contains('form-control')) {
+            // show bookmark list on click
             showBookmarkCont();
         } else if (e.target.classList.contains('rmv')) {
+        } else if (e.target.classList.contains('bm_group') ) {
         } else {
             document.querySelector('#bookmark_cont').classList.remove('d-block');
         }
@@ -430,9 +505,10 @@ function addEventListeners() {
       event_text.classList.add('d-block');
     });
 
+    // hide search widget on click
     document.getElementById('hide_wid').addEventListener('click', (e) => {
       main_cont.classList.toggle('d-none');
-    })
+    });
 };  // END of EventListeners
 
 

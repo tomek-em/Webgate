@@ -58,7 +58,7 @@ function showAlert(type, text) {
 
 // fetch events function
 function getSlots(mon, sun) {
-    const url = `/webgate/calendar/getslots`;
+    const url = `/webgate/slots/getslots`;
 
     // create XMR Obj
     let xhr = new XMLHttpRequest();
@@ -79,7 +79,6 @@ function getSlots(mon, sun) {
                 console.log('Error');
             }
         }
-    // console.log(`mon=${dates['mon']}&sun=${dates['sun']}&usr=${user}`);
     xhr.send(`mon=${mon}&sun=${sun}&usr=${current_usr}`);
     }
 
@@ -112,12 +111,12 @@ function showSlots() {
         if(slot.start < first) first = slot.start;
         cur_day.appendChild(slot_div);
     });
-    console.log(`first ${first}`);
+    // console.log(`first ${first}`);
 }
 
 
 function sendSlotSet(slots) {
-    let url = `/webgate/calendar/setslots`;
+    let url = `/webgate/slots/setslots`;
     let xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -125,9 +124,8 @@ function sendSlotSet(slots) {
     xhr.onload = function() {
         if(xhr.status == 200) {
             let res = xhr.responseText;
-            console.log(res);
-            //addEvent(data);
-            // alert
+            // console.log(res);
+
             showAlert('success', 'Slots added');
             clearCalendar();
             createWeekCalendar(weekDates['mon'].split("-").reverse().join("-"), 0);
@@ -141,9 +139,9 @@ function sendSlotSet(slots) {
 
 // delete slots
 function deleteSlots(date) {
-    let url = `/webgate/calendar/deleteslots`;
+    let url = `/webgate/slots/deleteslots`;
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', url, true);
+    xhr.open('DELETE', `${url}/${date}`, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
     xhr.onload = function() {
@@ -158,13 +156,13 @@ function deleteSlots(date) {
             console.log('error');
         }
     }
-    xhr.send(`date=${date}`);
+    xhr.send();
 }
 
 
 // book slot
 function bookSlot(id) {
-    let url = `/webgate/calendar/bookslot`;
+    let url = `/webgate/slots/bookslot`;
     let xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -267,7 +265,7 @@ function setEventListeners() {
         let days = document.querySelectorAll('.day_body');
         days.forEach((day) => {
             day.addEventListener('click', (e) => {
-                console.log(current_usr);
+                // console.log(current_usr);
 
                 if(current_usr == SESSION_USR) {
                     day_name = day.parentElement.id;
@@ -280,7 +278,6 @@ function setEventListeners() {
                         document.querySelector('#confirm_del_alert').classList.add('d-block');
                         delete_slots_date = date;
                     } else {
-                        console.log('no slots!');
                         form_container.classList.add('slide');
                     }
                 } else {
@@ -403,7 +400,8 @@ function clearCalendar() {
     }
 
     // set current calendar user name
-    if(current_usr != undefined) {              document.querySelector('#cal_title').innerHTML = `Book time at ${current_usr}`;
+    if(current_usr != undefined) {
+      document.querySelector('#cal_title').innerHTML = `Book time at ${current_usr}`;
     }
 }
 

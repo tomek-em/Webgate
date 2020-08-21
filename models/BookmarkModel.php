@@ -1,12 +1,12 @@
 <?php
 
-class BMark {
+class BookmarkModel {
     private $db;
-    
+
     public function __construct() {
         $this->db = new Database;
     }
-    
+
     // add event to db
     public function addSingleBookmark($data) {
         $this->db->query('INSERT INTO bookmarks (title, web, user_id, bm_group) VALUES(:title, :web, :user_id, :bm_group)');
@@ -21,29 +21,34 @@ class BMark {
             return 0;
         }
     }
-    
+
     // get bookmarks
-    public function getBookmarksByUser(){
-        $this->db->query('SELECT * FROM bookmarks 
+    public function getBookmarksByUser( $usr_id ){
+        $this->db->query('SELECT * FROM bookmarks
                 WHERE user_id = :user_id
                 ORDER BY title ASC');
-        $this->db->bind(':user_id', $_SESSION['user_id']);
+        $this->db->bind(':user_id', $usr_id );
 
         $bmarks = $this->db->resultSet();
-        return $bmarks;
+        if($bmarks) {
+          return $bmarks;
+        } else {
+          return NULL;
+        }
+
     }
-    
-    
+
+
     // delete bookmark
     public function deleteSingleBookmark($id) {
         $this->db->query('DELETE FROM bookmarks WHERE id = :id');
         $this->db->bind(':id', $id);
-        
+
         if($this->db->execute()) {
             return true;
         } else {
             return false;
         }
     }
-    
+
 }

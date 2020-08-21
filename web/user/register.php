@@ -4,19 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo APP_NAME; ?> </title>
-    
+
     <!-- Font awesome -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Poppins&display=swap" rel="stylesheet">
-    
+
     <!-- Bootstrap core CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="<?php echo URL_ROOT ?>app/web/css/main.css">
-    
+
     <!--  recaptcha -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
-    
+
     <div class="container mt-2">
         <div class="col-md-6 mx-auto">
             <div class="card card-body bg-light mt-5">
@@ -45,12 +45,12 @@
                         <span class="invalid-feedback"><?php echo $data['confirm_password_err']; ?></span>
                     </div>
                     
-                        <div class="mt-4 mb-4">
-                            <div class="g-recaptcha <?php echo (!empty($data['recaptcha_err'])) ? 'is-invalid' : ' ' ?>" data-sitekey="6LfMAZsUAAAAAKkvU6Pu_g2Iq98ugMahcJqN83vj"></div>
-                            <span class="invalid-feedback"><?php echo $data['recaptcha_err']; 
-                                ?></span>
-                        </div>
-                    
+                      <div class="mt-4 mb-4">
+                          <div class="g-recaptcha <?php echo (!empty($data['recaptcha_err'])) ? 'is-invalid' : ' ' ?>" data-sitekey="6LfMAZsUAAAAAKkvU6Pu_g2Iq98ugMahcJqN83vj"></div>
+                          <span class="invalid-feedback"><?php echo $data['recaptcha_err'];
+                              ?></span>
+                      </div>
+
                     <div class="row">
                         <div class="col">
                             <input type="submit" value="Register" class="btn btn-success btn-block">

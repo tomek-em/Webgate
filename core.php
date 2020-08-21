@@ -13,12 +13,11 @@ class Core {
                 $moduleName = ucfirst($url[0]);
             }
             $this->process($moduleName, $url[1], $url[2]);
-            //$this->render($_GET['url']);
         }
     }
 
     // Proces function -----------------------
-    public function process($mod, $method, $p){
+    public function process($mod, $method, $param){
         // create new instance of module class
         $this->currentModule = new $mod;
         unset($url[0]);
@@ -26,15 +25,15 @@ class Core {
         if(method_exists($this->currentModule, $method)) {
             $this->currentMethod = $method;
             //$data = [];
-            $param = $p;
+
             call_user_func([$this->currentModule, $this->currentMethod], $param);
             unset($url[1]);
             unset($url[2]);
         } else {
-            //$this->currentModule
+            
         }
-
     } // End of process
+
 
 
     // Render fucntion ------------------------
