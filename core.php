@@ -55,31 +55,4 @@ class Core {
 }
 
 
-// process
-// render
-
-
-//class Controller {
-//    // load model
-//    // ... like Post class to handle db (see Pages.php extend class)
-//    public function model( $model ) {
-//        require_once '../app/models/' . $model . '.php';
-//
-//        // instance model
-//        return new $model();
-//    }
-//
-//    // load view
-//    // .. like /views/pages/index.php (see Pages.php extend class)
-//    public function view( $view, $data = [] ) {
-//
-//        if( file_exists('../app/views/' . $view. '.php') ) {
-//            require_once '../app/views/' . $view . '.php';
-//        } else {
-//            die('View does not exist'); // if view does not exist it will stop the app
-//        }
-//    }
-//
-//}
-
 ?>

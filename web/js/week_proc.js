@@ -68,6 +68,11 @@ function getWeekEvents(id, dates) {
   getApi(url, `first=${dates[0]}&last=${dates[6]}`)
   .then((res) => res.json())
   .then((json) => {
+    const days = document.querySelectorAll('.day_body');
+    for (let i = 0; i < days.length; i++){
+        days[i].innerHTML = '';
+    }
+
     json.forEach((ev, i) =>  {
       if(ev.type != 'Wait') {
         events[i] = ev;
@@ -374,8 +379,6 @@ function clearCalendar() {
     for (let i = 0; i < headers.length; i++){
         headers[i].classList.remove('today');
     }
-
-    events = [];
 }
 
 

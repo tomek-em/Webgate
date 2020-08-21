@@ -21,7 +21,6 @@
 </head>
 
 <body>
-
     <div class="content hero_image" id="hero_img">
         <header>
             <!-- Navbar -->
