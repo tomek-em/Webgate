@@ -11,7 +11,7 @@
     <!-- Bootstrap core CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="<?php echo URL_ROOT ?>app/web/css/main.css">
+    <link type="text/css" href="<?php echo URL_ROOT ?>app/web/css/main.css">
 
     <!--  recaptcha -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
@@ -44,7 +44,7 @@
                         <input type="password" name="confirm_password" class="form-control form-control-lg <?php echo (!empty($data['confirm_password_err'])) ? 'is-invalid' : ' ' ?>" value="<?php echo $data['confirm_password']; ?>">
                         <span class="invalid-feedback"><?php echo $data['confirm_password_err']; ?></span>
                     </div>
-                    
+
                       <div class="mt-4 mb-4">
                           <div class="g-recaptcha <?php echo (!empty($data['recaptcha_err'])) ? 'is-invalid' : ' ' ?>" data-sitekey="6LfMAZsUAAAAAKkvU6Pu_g2Iq98ugMahcJqN83vj"></div>
                           <span class="invalid-feedback"><?php echo $data['recaptcha_err'];

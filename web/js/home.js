@@ -207,6 +207,7 @@ function createBookmarkList(logged) {
       id: 'youtube_search'
     });
 
+
     // Create Li for each bookmark item
     bookmarks.forEach((bmr) => {
         let li = document.createElement('li');
@@ -345,12 +346,14 @@ function getBookmarks() {
   .then((res) => res.json())
   .then((json) => {
     clearBookmarkList();
-    // bookmarks = json;
-    json.forEach((item, i) => {
-      bookmarks.push(item);
-    });
-
-    createBookmarkList(true);
+    if(!json) {
+      createBookmarkList(true);
+    } else {
+      json.forEach((item, i) => {
+        bookmarks.push(item);
+      });
+      createBookmarkList(true);
+    }
   })
   .catch(function() {
       console.log("error");

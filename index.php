@@ -1,8 +1,12 @@
 <?php
+<<<<<<< HEAD
 /*
 *   App Name: Webgate
 *   Author: Tomasz Mejer
 */
+=======
+
+>>>>>>> 665f95701fadec095a84f15cc70b21b06870bce1
     require_once('conf/conf.php');
     require_once('lib/session.php');
     require_once('lib/Database.php');
